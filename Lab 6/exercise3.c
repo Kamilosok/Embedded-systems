@@ -6,33 +6,34 @@
 #include <avr/interrupt.h>
 #include "sound.c"
 
-extern const uint8_t dzwiek_raw[];    // deklaracja tablicy
+// Extern declaration
+extern const uint8_t dzwiek_raw[];
 extern const uint16_t dzwiek_raw_len;
 
-// inicjalizacja SPI
+// SPI init
 void spi_init()
 {
-    // włącz odbiornik i nadajnik
+    // Enable receiver and transmitter, not needed?
     UCSR0B = _BV(RXEN0) | _BV(TXEN0);
-    // ustaw piny MOSI, SCK i ~SS jako wyjścia
+    // Set MOSI, SCK and ~SS as outputs
     DDRB |= _BV(DDB3) | _BV(DDB5) | _BV(DDB2);
     PORTB |= _BV(PB2);
 
-    // włącz SPI w trybie master z zegarem 250 kHz
+    // Enable SPI in master mode with 250 kHz clock
     SPCR = _BV(SPE) | _BV(MSTR) | _BV(SPR1);
 
     SPSR &= ~_BV(SPI2X);
 }
 
-// transfer jednego bajtu
+// Transfer one byte
 void spi_transfer(uint8_t data)
 {
-    // rozpocznij transmisję
+    // Start the transmission
     SPDR = data;
-    // czekaj na ukończenie transmisji
+    // Active wait till the end of transmission
     while (!(SPSR & _BV(SPIF)))
         ;
-    // zwróć otrzymane dane
+    // Return received data
     uint8_t dummy = SPDR;
 }
 
@@ -43,7 +44,6 @@ ISR(TIMER1_COMPA_vect)
 
 void timer_init()
 {
-    // ustaw tryb licznika
     // CTC
     TCCR1B = _BV(WGM12);
     // Prescaler 8

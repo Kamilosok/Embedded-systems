@@ -1,3 +1,5 @@
+/*Kamil Zdancewicz 345320*/
+
 #include <avr/io.h>
 #include <util/delay.h>
 #include <stdio.h>
@@ -7,8 +9,8 @@
 #define LED_DDR DDRB
 #define LED_PORT PORTB
 
-#define BAUD 9600                              // baudrate
-#define UBRR_VALUE ((F_CPU) / 16 / (BAUD) - 1) // zgodnie ze wzorem
+#define BAUD 9600                              // Baudrate
+#define UBRR_VALUE ((F_CPU) / 16 / (BAUD) - 1) // From datasheet
 
 #define DIT_LEN 200
 #define DAH_LEN DIT_LEN * 3
@@ -18,41 +20,40 @@
 
 #define BUF_SIZE 32
 
-// inicjalizacja UART
 void uart_init()
 {
-    // ustaw baudrate
     UBRR0 = UBRR_VALUE;
-    // wyczyść rejestr UCSR0A
     UCSR0A = 0;
-    // włącz odbiornik i nadajnik
+    // Enable receiver and transmitter
     UCSR0B = _BV(RXEN0) | _BV(TXEN0);
-    // ustaw format 8n1
+    // 8n1 format
     UCSR0C = _BV(UCSZ00) | _BV(UCSZ01);
 }
 
-// transmisja jednego znaku
+// Transmit one character
 int uart_transmit(char data, FILE *stream)
 {
-    // czekaj aż transmiter gotowy
+    // Wait until ready
     while (!(UCSR0A & _BV(UDRE0)))
         ;
     UDR0 = data;
     return 0;
 }
 
-// odczyt jednego znaku
+// Receive one character
 int uart_receive(FILE *stream)
 {
-    // czekaj aż znak dostępny
+    // Wait until ready
     while (!(UCSR0A & _BV(RXC0)))
         ;
     return UDR0;
 }
 
-// . 1, - 3, przerwy między znakami 1, między literami 3
-// Max 5 długości, kodowanie: największe 3 bity oznaczają długość kodu (bo <8), następnie max 5 znaków oznacza 0 -> . , 1 -> - , dopasowane do prawej
-// PROGMEM ?
+/*
+    . 1, - 3, breaks between signals of length 1, between characters length 3
+    Max 5 length, Encoding: most significant 3 bits signal the length of the code (<8),
+    then bits going right 0 -> . , 1 -> - , fitted right
+*/
 const uint8_t morseCodes[36] = {
     0b01000001, // A .-
     0b10001000, // B -...
@@ -93,7 +94,7 @@ const uint8_t morseCodes[36] = {
     0b10111110  // 9 ----.
 };
 
-// Converts a morse-compatible character to it's representative id in the morseCodes array, should normalize size
+// Converts a morse-compatible character to it's representative id in the morseCodes array normalizing size
 uint8_t charToId(char character)
 {
     if (character - '0' >= 0 && character - '0' <= 9)
@@ -138,9 +139,9 @@ int main()
 {
     // Set to output
     LED_DDR |= _BV(LED);
-    // zainicjalizuj UART
+
     uart_init();
-    // skonfiguruj strumienie wejścia/wyjścia
+    // Printf and scanf may be expensive, but it's much easier in a simple program
     fdev_setup_stream(&uart_file, uart_transmit, uart_receive, _FDEV_SETUP_RW);
     stdin = stdout = stderr = &uart_file;
 

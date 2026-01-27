@@ -1,6 +1,8 @@
+/*Kamil Zdancewicz 345320*/
+
 #include <avr/io.h>
 #include <util/delay.h>
-// Chyba brakuje jednego rezystora 220
+
 #define LED_DDR DDRD
 #define LED_PORT PORTD
 
@@ -38,5 +40,3 @@ int main()
             num += 1;
     }
 }
-
-// Po tym ze zdjęcia zmienia się na USB(X+1)

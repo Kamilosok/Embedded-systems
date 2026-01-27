@@ -10,36 +10,35 @@
 #define LED_DDR DDRB
 #define LED_PORT PORTB
 
-// Dla preskalera 1, 1 tick to 62.5ns, więc 16 ticków to 1 us
+// For prescaler 1, 1 tick is 62.5ns, so 16 ticks is 1 us
 
 void delay_us_timer(uint16_t us)
 {
     TCNT1 = 0;
 
-    // W międzyczasie liczy a my robimy operacje, raczej zmieścimy się w 16 tickach, może zkompensować za zapis 0
-
+    // Meanwhile it counts and we operate, we should make it in 16 ticks, maybe compensate for writing 0
     uint16_t ticks = 16 * us;
 
     while (TCNT1 < ticks)
         ;
 }
 
+// Set timer mode
 void ctc_init()
 {
-    // ustaw tryb licznika
-    // WGM1  = 0000 -- normal
-    // CS1   = 001  -- prescaler 1
+    // WGM1 0 - normal
+    // CS1 1- prescaler 1
     TCCR1B = _BV(CS10);
 }
 
-// inicjalizacja ADC
+// ADC initialization
 void adc_init()
 {
-    ADMUX = _BV(REFS0); // referencja AVcc, wejście ADC0
-    DIDR0 = _BV(ADC0D); // wyłącz wejście cyfrowe na ADC0
-    // częstotliwość zegara ADC 125 kHz (16 MHz / 128)
-    ADCSRA = _BV(ADPS0) | /*_BV(ADPS1) |*/ _BV(ADPS2); // preskaler 32
-    ADCSRA |= _BV(ADEN);                               // włącz ADC
+    ADMUX = _BV(REFS0); // AVcc reference, ADC0 input
+    DIDR0 = _BV(ADC0D); // Disable analog input on ADC0
+    // ADC clock frequency: 500 kHz (16 MHz / 32)
+    ADCSRA = _BV(ADPS0) | /*_BV(ADPS1) |*/ _BV(ADPS2); // prescaler 32
+    ADCSRA |= _BV(ADEN);                               // enable ADC
 }
 
 #define MEASURE_DELAY 50000UL // us
@@ -179,16 +178,16 @@ const uint16_t gamma_table[1024] PROGMEM = {
 uint32_t adc_measure()
 {
     LED_PORT &= ~_BV(LED);
-    ADCSRA |= _BV(ADSC); // wykonaj konwersję
+    ADCSRA |= _BV(ADSC); // Convert and poll
     while (!(ADCSRA & _BV(ADIF)))
         ;
-    ADCSRA |= _BV(ADIF); // wyczyść bit ADIF (pisząc 1!)
-    uint32_t v = ADC;    // weź zmierzoną wartość (0..1023)
+    ADCSRA |= _BV(ADIF); // Erase ADIF (by writing 1!)
+    uint32_t v = ADC;    // Get value [0,1023]
 
     return v;
 }
 
-// Nawet z latarką przyłożoną ma >200, więc trochę przesunięte
+// Even with a flashlight put to it >200, so a bit shifted
 uint32_t translateRate(uint32_t v)
 {
     v = (v * v) / NUM_5V;
@@ -217,7 +216,7 @@ void ledCycle(uint32_t v)
 int main()
 {
     LED_DDR |= _BV(LED);
-    // zainicjalizuj ADC
+
     ctc_init();
     adc_init();
 

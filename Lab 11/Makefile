@@ -1,5 +1,5 @@
-TARGET     = exercise4
-OBJ	       = 
+TARGET     = exercise1
+OBJ	   =
 MCU        = atmega328p
 F_CPU      = 16000000
 PORT       = /dev/ttyUSB0
@@ -16,7 +16,7 @@ SCREEN     = screen
 # Compile flags
 override CFLAGS = -g -std=c99 -DF_CPU=$(F_CPU) -Wall $(OPTS) -mmcu=$(MCU) -I.
 # Link flags, uncomment the second line if you wish UART to handle floats
-override LDFLAGS = -Wl,-Map,$(TARGET).map 
+LDFLAGS = -Wl,-Map,$(TARGET).map 
 #LDFLAGS += -Wl,-u,vfprintf -Wl,-u,vfscanf -lprintf_flt -lscanf_flt -lm
 
 # Tasks

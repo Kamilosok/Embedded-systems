@@ -1,4 +1,5 @@
-TARGET     = exercise2Slave
+TARGET     = exercise1
+OBJ	   	   = #pid.o
 MCU        = atmega328p
 F_CPU      = 16000000
 PORT       = /dev/ttyUSB0
@@ -13,16 +14,16 @@ AVRDUDE    = avrdude
 SCREEN     = screen
 
 # Compile flags
-override CFLAGS = -g -std=c99 -DF_CPU=$(F_CPU) -Wall $(OPTS) -mmcu=$(MCU)
+override CFLAGS = -g -std=c99 -DF_CPU=$(F_CPU) -Wall $(OPTS) -mmcu=$(MCU) -I.
 # Link flags, uncomment the second line if you wish UART to handle floats
 LDFLAGS = -Wl,-Map,$(TARGET).map 
-#LDFLAGS += -Wl,-u,vfprintf -Wl,-u,vfscanf -lprintf_flt -lscanf_flt -lm
+# LDFLAGS += -Wl,-u,vfprintf -Wl,-u,vfscanf -lprintf_flt -lscanf_flt -lm
 
 # Tasks
 all: $(TARGET).hex
 
 # Compile and link
-$(TARGET).elf: $(TARGET).c
+$(TARGET).elf: $(OBJ) $(TARGET).c
 	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $^ $(LIBS)
 
 $(TARGET).hex: $(TARGET).elf

@@ -1,3 +1,5 @@
+/*Kamil Zdancewicz 345320*/
+
 #include <avr/io.h>
 #include <inttypes.h>
 #include <util/delay.h>

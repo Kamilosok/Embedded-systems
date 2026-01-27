@@ -5,9 +5,6 @@
 #include <avr/sleep.h>
 #include <avr/interrupt.h>
 
-#define BAUD 9600                              // baudrate
-#define UBRR_VALUE ((F_CPU) / 16 / (BAUD) - 1) // zgodnie ze wzorem
-
 // Must be a power of 2
 #define BUF_SIZE 64
 static volatile uint8_t curr_out = 0;
@@ -16,20 +13,19 @@ static volatile char out_buf[BUF_SIZE];
 
 #define BUF_MASK(x) ((x) & (BUF_SIZE - 1))
 
-// inicjalizacja UART
+#define BAUD 9600                              // Baudrate
+#define UBRR_VALUE ((F_CPU) / 16 / (BAUD) - 1) // From datasheet
+
 void uart_init()
 {
-    // ustaw baudrate
     UBRR0 = UBRR_VALUE;
-    // wyczyść rejestr UCSR0A
     UCSR0A = 0;
-    // włącz odbiornik i nadajnik
+    // Enable receiver and transmitter
     UCSR0B = _BV(RXEN0) | _BV(TXEN0);
-    // ustaw format 8n1
+    // 8n1 format
     UCSR0C = _BV(UCSZ00) | _BV(UCSZ01);
 
-    // włącz przerwania
-
+    // Interrupts
     UCSR0B |= _BV(RXCIE0);
     // UCSR0B |= _BV(TXCIE0);
     UCSR0B |= _BV(UDRIE0);
@@ -75,7 +71,6 @@ ISR(USART_UDRE_vect)
 
 int main()
 {
-    // zainicjalizuj UART
     uart_init();
 
     set_sleep_mode(SLEEP_MODE_IDLE);

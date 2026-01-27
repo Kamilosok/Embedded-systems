@@ -1,6 +1,8 @@
+/*Kamil Zdancewicz 345320*/
+
 #include <avr/io.h>
 #include <util/delay.h>
-// DLACZEGO LED MA BOK ŚCIĘTY Z KATODY A DRABINKA LED Z ANODY
+
 #define LEDK_DDR DDRD
 #define LEDK_PORT PORTD
 

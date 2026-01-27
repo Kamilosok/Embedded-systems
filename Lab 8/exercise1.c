@@ -15,7 +15,7 @@ static void vKitt(void *pvParameters);
 
 int main(void)
 {
-    // Create task.
+    // Create task
     xTaskHandle pressLedDelay_handle;
     xTaskHandle kitt_handle;
 
@@ -35,7 +35,7 @@ int main(void)
         kitt_TASK_PRIORITY,
         &kitt_handle);
 
-    // Start scheduler.
+    // Start scheduler
     vTaskStartScheduler();
 
     return 0;
@@ -44,7 +44,6 @@ int main(void)
 void vApplicationIdleHook(void)
 {
 }
-
 
 #define LEDK_DDR DDRD
 #define LEDK_PORT PORTD

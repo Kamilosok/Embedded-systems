@@ -8,41 +8,36 @@
 
 #include "i2c.h"
 
-#define BAUD 9600                              // baudrate
-#define UBRR_VALUE ((F_CPU) / 16 / (BAUD) - 1) // zgodnie ze wzorem
-
 #define BUF_SIZE 32
+#define BAUD 9600                              // Baudrate
+#define UBRR_VALUE ((F_CPU) / 16 / (BAUD) - 1) // From datasheet
 
-// inicjalizacja UART
 void uart_init()
 {
-    // ustaw baudrate
     UBRR0 = UBRR_VALUE;
-    // wyczyść rejestr UCSR0A
     UCSR0A = 0;
-    // włącz odbiornik i nadajnik
+    // Enable receiver and transmitter
     UCSR0B = _BV(RXEN0) | _BV(TXEN0);
-    // ustaw format 8n1
+    // 8n1 format
     UCSR0C = _BV(UCSZ00) | _BV(UCSZ01);
 }
 
-// transmisja jednego znaku
+// Transmit one character
 int uart_transmit(char data, FILE *stream)
 {
-    // czekaj aż transmiter gotowy
+    // Wait until ready
     while (!(UCSR0A & _BV(UDRE0)))
         ;
     UDR0 = data;
     return 0;
 }
 
-// odczyt jednego znaku
+// Receive one character
 int uart_receive(FILE *stream)
 {
-    // czekaj aż znak dostępny
+    // Wait until ready
     while (!(UCSR0A & _BV(RXC0)))
         ;
-
     return UDR0;
 }
 
@@ -58,12 +53,12 @@ uint8_t addr_to_eeprom(uint16_t addr, uint8_t read)
 
 int main()
 {
-    // zainicjalizuj UART
+
     uart_init();
-    // skonfiguruj strumienie wejścia/wyjścia
+
     fdev_setup_stream(&uart_file, uart_transmit, uart_receive, _FDEV_SETUP_RW);
     stdin = stdout = stderr = &uart_file;
-    // zainicjalizuj I2C
+
     i2cInit();
 
     printf("Options: read addr, write addr value\r\n");
@@ -72,7 +67,7 @@ int main()
 
     while (1)
     {
-        // I tak trzeba będzie napisać parser trudniejszego formatu więc rozgrzewka
+        // Some parsing
         uint8_t i = 0;
         while (i < BUF_SIZE - 1)
         {
@@ -139,7 +134,7 @@ int main()
 
         i2cSend(addr_to_eeprom(addr, 0));
 
-        // address in the bank
+        // Address in the bank
         i2cSend(addr & 0xff);
 
         if (mode == 0)

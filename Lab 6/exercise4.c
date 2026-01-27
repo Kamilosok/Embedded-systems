@@ -21,9 +21,7 @@ uint8_t digits[10] = {
 // inicjalizacja SPI
 void spi_init()
 {
-    // włącz odbiornik i nadajnik
-    // UCSR0B = _BV(RXEN0) | _BV(TXEN0);
-    // ustaw piny MOSI, SCK, ~SS i PB1 jako wyjścia
+    // Set MOSI, SCK, ~SS and PB1 as output
     DDRB |= _BV(DDB3) | _BV(DDB5) | _BV(DDB2) | _BV(DDB1);
 
     // LEDS ON
@@ -31,21 +29,21 @@ void spi_init()
 
     PORTB &= ~_BV(PB1);
 
-    // włącz SPI w trybie master z zegarem 250 kHz
+    // Enable SPI in master mode with 250 kHz clock
     SPCR = _BV(SPE) | _BV(MSTR) | _BV(SPR1);
 
     SPSR &= ~_BV(SPI2X);
 }
 
-// transfer jednego bajtu
+// Transfer one byte
 void spi_transfer(uint8_t data)
 {
-    // rozpocznij transmisję
+    // Start the transmission
     SPDR = data;
-    // czekaj na ukończenie transmisji
+    // Active wait till the end of transmission
     while (!(SPSR & _BV(SPIF)))
         ;
-    // zwróć otrzymane dane
+    // Return received data
     uint8_t dummy = SPDR;
 }
 
@@ -56,7 +54,6 @@ ISR(TIMER1_COMPA_vect)
 
 void timer_init()
 {
-    // ustaw tryb licznika
     // CTC
     TCCR1B = _BV(WGM12);
     // Prescaler 128

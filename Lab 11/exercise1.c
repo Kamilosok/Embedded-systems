@@ -18,10 +18,11 @@ ISR(ADC_vect)
 
 void adc_init()
 {
-    ADMUX = _BV(REFS0);                            // referencja 5V, ADC0
-    DIDR0 = _BV(ADC0D);                            // wyłącz wejście cyfrowe na ADC0
-    ADCSRA = _BV(ADPS0) | _BV(ADPS1) | _BV(ADPS2); // preskaler 128
-    ADCSRA |= _BV(ADEN) | _BV(ADIE);               // włącz ADC i przerwania
+    ADMUX = _BV(REFS0); // AVcc reference, ADC0 input
+    DIDR0 = _BV(ADC0D); // Disable analog input on ADC0
+    // ADC clock frequency: 125 kHz (16 MHz / 128)
+    ADCSRA = _BV(ADPS0) | _BV(ADPS1) | _BV(ADPS2); // prescaler 128
+    ADCSRA |= _BV(ADEN) | _BV(ADIE);               // enable ADC and interrupt
 }
 
 ISR(TIMER1_COMPA_vect)
@@ -61,7 +62,7 @@ int main()
 
     while (1)
     {
-        // Przez to że oba są z zakresu 0, 1023 to możemy bezpośrednio, ładniej niż clamp do [500, 1000] bo widać i słychać różnicę
+        // Since both are in the range 0, 1023, we can set it directly
         OCR1A = adc_last;
     }
 }

@@ -51,7 +51,7 @@ const uint8_t sin_table[LEN_CYCLE] PROGMEM = {
     83, 80, 77, 74, 71, 68, 65, 62, 59, 56, 53, 50, 47, 44, 40, 37,
     34, 31, 28, 25, 22, 19, 16, 12, 9, 6, 3, 0};
 
-// wg. https://www.rapidtables.com/convert/color/hsv-to-rgb.html
+// According to https://www.rapidtables.com/convert/color/hsv-to-rgb.html
 void hsv_to_rgb(uint8_t h, uint8_t *r, uint8_t *g, uint8_t *b)
 {
     uint8_t region = h / 43; // 5 regions
@@ -102,7 +102,7 @@ int main()
     uint8_t h;
     uint8_t r, g, b;
 
-    uint16_t seed = 123; // Może jakiś szum
+    uint16_t seed = 123; // Maybe some noise instead of this
     srand(seed);
 
     while (1)

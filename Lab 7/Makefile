@@ -16,7 +16,7 @@ SCREEN     = screen
 # Compile flags
 override CFLAGS = -g -std=c99 -DF_CPU=$(F_CPU) -Wall $(OPTS) -mmcu=$(MCU) -I.
 # Link flags, uncomment the second line if you wish UART to handle floats
-override LDFLAGS = -Wl,-Map,$(TARGET).map 
+LDFLAGS = -Wl,-Map,$(TARGET).map 
 #LDFLAGS += -Wl,-u,vfprintf -Wl,-u,vfscanf -lprintf_flt -lscanf_flt -lm
 
 # Tasks

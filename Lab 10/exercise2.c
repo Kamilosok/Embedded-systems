@@ -6,37 +6,35 @@
 #include <inttypes.h>
 #include "hd44780.h"
 
-#define BAUD 9600                              // baudrate
-#define UBRR_VALUE ((F_CPU) / 16 / (BAUD) - 1) // zgodnie ze wzorem
-
 #define MAX(a, b) (((a) > (b)) ? (a) : (b))
+
+#define BAUD 9600                              // Baudrate
+#define UBRR_VALUE ((F_CPU) / 16 / (BAUD) - 1) // From datasheet
 
 void uart_init()
 {
-    // ustaw baudrate
     UBRR0 = UBRR_VALUE;
-    // wyczyść rejestr UCSR0A
     UCSR0A = 0;
-    // włącz odbiornik i nadajnik
+    // Enable receiver and transmitter
     UCSR0B = _BV(RXEN0) | _BV(TXEN0);
-    // ustaw format 8n1
+    // 8n1 format
     UCSR0C = _BV(UCSZ00) | _BV(UCSZ01);
 }
 
-// transmisja jednego znaku
+// Transmit one character
 int uart_transmit(char data, FILE *stream)
 {
-    // czekaj aż transmiter gotowy
+    // Wait until ready
     while (!(UCSR0A & _BV(UDRE0)))
         ;
     UDR0 = data;
     return 0;
 }
 
-// odczyt jednego znaku
+// Receive one character
 int uart_receive(FILE *stream)
 {
-    // czekaj aż znak dostępny
+    // Wait until ready
     while (!(UCSR0A & _BV(RXC0)))
         ;
     return UDR0;
@@ -51,7 +49,7 @@ int hd44780_transmit(char data, FILE *stream)
 FILE hd44780_file;
 FILE uart_file;
 /*
-SET CGRAM ADDRESS bity 5-3 to numer znaku, 2-0 numer wiersza
+SET CGRAM ADDRESS bits 5-3 are the character number, 2-0 row number
 */
 
 // num_char < 8, num_bars < 6
@@ -78,12 +76,12 @@ void upload_bar_char(uint8_t num_char, uint8_t num_bars)
 
 int main()
 {
-    // skonfiguruj wyświetlacz
+    // Configuration
     LCD_Initialize();
     uart_init();
 
     LCD_Clear();
-    // skonfiguruj strumienie
+    // Data streams
     fdev_setup_stream(&hd44780_file, hd44780_transmit, NULL, _FDEV_SETUP_WRITE);
     fdev_setup_stream(&uart_file, uart_transmit, uart_receive, _FDEV_SETUP_RW);
     stdin = stdout = stderr = &uart_file;

@@ -16,7 +16,7 @@ static volatile uint16_t prev_capture = 0;
 static volatile uint8_t new = 0;
 static volatile double freq = 0;
 
-// Overflow int
+// Overflow interrupt
 ISR(TIMER1_OVF_vect)
 {
     ovf_count++;
@@ -48,9 +48,6 @@ ISR(TIMER1_CAPT_vect)
 
     freq = (double)CPU_F / ((double)PRESCALER * ticks);
     new = 1;
-
-    // Logika w ISR, a printf w pętli głównej?
-    // printf("Frequency on ICP1: %.2lfHz\r\n", freq);
 }
 
 void timer_init()
@@ -67,35 +64,33 @@ void timer_init()
 }
 
 FILE uart_file;
+#define BAUD 9600                              // Baudrate
+#define UBRR_VALUE ((F_CPU) / 16 / (BAUD) - 1) // From datasheet
 
-#define BAUD 9600                              // baudrate
-#define UBRR_VALUE ((F_CPU) / 16 / (BAUD) - 1) // zgodnie ze wzorem
-
-// inicjalizacja UART
 void uart_init()
 {
-    // ustaw baudrate
     UBRR0 = UBRR_VALUE;
-    // włącz odbiornik i nadajnik
+    UCSR0A = 0;
+    // Enable receiver and transmitter
     UCSR0B = _BV(RXEN0) | _BV(TXEN0);
-    // ustaw format 8n1
+    // 8n1 format
     UCSR0C = _BV(UCSZ00) | _BV(UCSZ01);
 }
 
-// transmisja jednego znaku
+// Transmit one character
 int uart_transmit(char data, FILE *stream)
 {
-    // czekaj aż transmiter gotowy
+    // Wait until ready
     while (!(UCSR0A & _BV(UDRE0)))
         ;
     UDR0 = data;
     return 0;
 }
 
-// odczyt jednego znaku
+// Receive one character
 int uart_receive(FILE *stream)
 {
-    // czekaj aż znak dostępny
+    // Wait until ready
     while (!(UCSR0A & _BV(RXC0)))
         ;
     return UDR0;

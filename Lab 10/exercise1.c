@@ -6,35 +6,33 @@
 #include <inttypes.h>
 #include "hd44780.h"
 
-#define BAUD 9600                              // baudrate
-#define UBRR_VALUE ((F_CPU) / 16 / (BAUD) - 1) // zgodnie ze wzorem
+#define BAUD 9600                              // Baudrate
+#define UBRR_VALUE ((F_CPU) / 16 / (BAUD) - 1) // From datasheet
 
 void uart_init()
 {
-    // ustaw baudrate
     UBRR0 = UBRR_VALUE;
-    // wyczyść rejestr UCSR0A
     UCSR0A = 0;
-    // włącz odbiornik i nadajnik
+    // Enable receiver and transmitter
     UCSR0B = _BV(RXEN0) | _BV(TXEN0);
-    // ustaw format 8n1
+    // 8n1 format
     UCSR0C = _BV(UCSZ00) | _BV(UCSZ01);
 }
 
-// transmisja jednego znaku
+// Transmit one character
 int uart_transmit(char data, FILE *stream)
 {
-    // czekaj aż transmiter gotowy
+    // Wait until ready
     while (!(UCSR0A & _BV(UDRE0)))
         ;
     UDR0 = data;
     return 0;
 }
 
-// odczyt jednego znaku
+// Receive one character
 int uart_receive(FILE *stream)
 {
-    // czekaj aż znak dostępny
+    // Wait until ready
     while (!(UCSR0A & _BV(RXC0)))
         ;
     return UDR0;
@@ -51,12 +49,12 @@ FILE uart_file;
 
 int main()
 {
-    // skonfiguruj wyświetlacz
+    // Configuration
     LCD_Initialize();
     uart_init();
 
     LCD_Clear();
-    // skonfiguruj strumienie
+    // Data streams
     fdev_setup_stream(&hd44780_file, hd44780_transmit, NULL, _FDEV_SETUP_WRITE);
     fdev_setup_stream(&uart_file, uart_transmit, uart_receive, _FDEV_SETUP_RW);
     stdin = stdout = stderr = &uart_file;
@@ -105,7 +103,6 @@ int main()
             col_num += 1;
         }
 
-        // Trochę powtórzone
         if (col_num >= 16)
         {
             second_row[16] = '\0';

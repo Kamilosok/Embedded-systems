@@ -8,43 +8,39 @@
 
 #include "i2c.h"
 
-#define BAUD 9600                              // baudrate
-#define UBRR_VALUE ((F_CPU) / 16 / (BAUD) - 1) // zgodnie ze wzorem
-
 #define BUF_SIZE 256ul
 #define MAX_RECORD_SIZE 255ul
 #define DATA_SIZE 512ul
 
-// inicjalizacja UART
+#define BAUD 9600                              // Baudrate
+#define UBRR_VALUE ((F_CPU) / 16 / (BAUD) - 1) // From datasheet
+
 void uart_init()
 {
-    // ustaw baudrate
     UBRR0 = UBRR_VALUE;
-    // wyczyść rejestr UCSR0A
     UCSR0A = 0;
-    // włącz odbiornik i nadajnik
+    // Enable receiver and transmitter
     UCSR0B = _BV(RXEN0) | _BV(TXEN0);
-    // ustaw format 8n1
+    // 8n1 format
     UCSR0C = _BV(UCSZ00) | _BV(UCSZ01);
 }
 
-// transmisja jednego znaku
+// Transmit one character
 int uart_transmit(char data, FILE *stream)
 {
-    // czekaj aż transmiter gotowy
+    // Wait until ready
     while (!(UCSR0A & _BV(UDRE0)))
         ;
     UDR0 = data;
     return 0;
 }
 
-// odczyt jednego znaku
+// Receive one character
 int uart_receive(FILE *stream)
 {
-    // czekaj aż znak dostępny
+    // Wait until ready
     while (!(UCSR0A & _BV(RXC0)))
         ;
-
     return UDR0;
 }
 
@@ -98,7 +94,7 @@ void print_eeprom(uint16_t start_address,
                   uint8_t *data)
 {
 
-    // Rekord 1
+    // Record 1
     uint16_t len1 = data_length;
     if (data_length > MAX_RECORD_SIZE)
     {
@@ -106,7 +102,7 @@ void print_eeprom(uint16_t start_address,
     }
     // printf("RECORD ONE:\r\n");
     generate_record(start_address, (uint8_t)len1, data);
-    // Potencjalnie rekord 2
+    // Potentially record 2
     if (data_length > MAX_RECORD_SIZE)
     {
 
@@ -127,12 +123,11 @@ void print_eeprom(uint16_t start_address,
 
 int main()
 {
-    // zainicjalizuj UART
     uart_init();
-    // skonfiguruj strumienie wejścia/wyjścia
+
     fdev_setup_stream(&uart_file, uart_transmit, uart_receive, _FDEV_SETUP_RW);
     stdin = stdout = stderr = &uart_file;
-    // zainicjalizuj I2C
+
     i2cInit();
 
     printf("Options: read addr, read addr length, write, write addr value\r\n");
@@ -141,7 +136,7 @@ int main()
 
     while (1)
     {
-        // I tak trzeba będzie napisać parser trudniejszego formatu więc rozgrzewka
+        // Parsing
         uint8_t i = 0, end = 0;
         while (i < BUF_SIZE - 1)
         {
@@ -195,11 +190,10 @@ int main()
             uint8_t data[BUF_SIZE];
             uint8_t checksum;
 
-            // Zmienne pomocnicze
-            unsigned int temp_val;  // Do bezpiecznego wczytywania przez scanf
-            unsigned int temp_addr; // Do adresu
+            unsigned int temp_val;  // For safe input with scanf
+            unsigned int temp_addr; // For addresses
             uint8_t i;
-            uint8_t calc_sum; // Do obliczania sumy kontrolnej
+            uint8_t calc_sum; // For calculating the checksum
             char start_code = 0;
 
             while (1)
@@ -232,7 +226,7 @@ int main()
                 if (record_type == 0x01)
                 {
 
-                    // Czyszczenie
+                    // Cleanup
                     while ((input_char = getchar()) != '\r' && input_char != EOF)
                         ;
 
@@ -261,7 +255,6 @@ int main()
 
                 // printf("ADR: %04X, LEN: %02X, TYP: %02X\r\n", address, byte_count, record_type);
 
-                // || 1 for debug
                 if (calc_sum == checksum)
                 {
                     // Sending
@@ -269,7 +262,7 @@ int main()
                     uint8_t page_counter = address & 0xF;
                     uint8_t data_counter = 0;
 
-                    // Adres w stronie
+                    // Address in the page
                     uint8_t i = page_counter;
 
                     printf("Starting at %u\r\n", address);
@@ -278,15 +271,14 @@ int main()
 
                     i2cSend(addr_to_eeprom(address, 0));
 
-                    // address in the bank
+                    // Address in the bank
                     i2cSend(address & 0xff);
 
                     while (data_counter < byte_count && (address & ~0xF) + i < DATA_SIZE)
                     {
                         if (i == 0x10)
                         {
-
-                            // Do nowej strony, dodatkowo wyzerowanie adresu w stronie
+                            // For a new page reset the address in the page
                             address += 0x10;
                             address = address & ~0xF;
 
@@ -297,7 +289,7 @@ int main()
 
                             i2cSend(addr_to_eeprom(address, 0));
 
-                            // address in the bank
+                            // Address in the bank
                             i2cSend(address & 0xff);
 
                             printf("Addr set to:%u\r\n", address);
@@ -348,7 +340,7 @@ int main()
 
                 i2cSend(addr_to_eeprom(addr, 0));
 
-                // address in the bank
+                // Address in the bank
                 i2cSend(addr & 0xff);
 
                 i2cStart();
@@ -377,7 +369,7 @@ int main()
 
                     i2cSend(addr_to_eeprom(addr, 0));
 
-                    // address in the bank
+                    // Address in the bank
                     i2cSend(addr & 0xff);
 
                     i2cSend(value);
@@ -393,7 +385,7 @@ int main()
 
                     i2cSend(addr_to_eeprom(addr, 0));
 
-                    // address in the bank
+                    // Address in the bank
                     i2cSend(addr & 0xff);
 
                     i2cStart();
@@ -401,7 +393,7 @@ int main()
 
                     uint8_t data_arr[DATA_SIZE];
 
-                    // Najwyraźniej poprawnie inkrementuje A8 aby przejść do drugiego banku, więc nie trzeba tego handlować, 1 to 512 w nocie sequence reada
+                    // Apparently, it correctly increments A8 to move to the second bank, so there is no need to handle it, 1 is 512 in the sequence read note.
                     for (uint16_t i = 0; i < value; i++)
                     {
                         if (addr + i >= DATA_SIZE)
@@ -412,7 +404,6 @@ int main()
                         else
                             data_arr[i] = i2cReadNoAck(); // NACK after last byte
 
-                        // Debugowe
                         // printf("Read value %hu from address %u\r\n", data_arr[i], addr + i);
                     }
 

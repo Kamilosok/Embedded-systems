@@ -1,37 +1,36 @@
+/*Kamil Zdancewicz 345320*/
+
 #include <avr/io.h>
 #include <stdio.h>
 #include <inttypes.h>
 
-#define BAUD 9600                              // baudrate
-#define UBRR_VALUE ((F_CPU) / 16 / (BAUD) - 1) // zgodnie ze wzorem
+#define BAUD 9600                              // Baudrate
+#define UBRR_VALUE ((F_CPU) / 16 / (BAUD) - 1) // From datasheet
 
-// inicjalizacja UART
 void uart_init()
 {
-    // ustaw baudrate
     UBRR0 = UBRR_VALUE;
-    // wyczyść rejestr UCSR0A
     UCSR0A = 0;
-    // włącz odbiornik i nadajnik
+    // Enable receiver and transmitter
     UCSR0B = _BV(RXEN0) | _BV(TXEN0);
-    // ustaw format 8n1
+    // 8n1 format
     UCSR0C = _BV(UCSZ00) | _BV(UCSZ01);
 }
 
-// transmisja jednego znaku
+// Transmit one character
 int uart_transmit(char data, FILE *stream)
 {
-    // czekaj aż transmiter gotowy
+    // Wait until ready
     while (!(UCSR0A & _BV(UDRE0)))
         ;
     UDR0 = data;
     return 0;
 }
 
-// odczyt jednego znaku
+// Receive one character
 int uart_receive(FILE *stream)
 {
-    // czekaj aż znak dostępny
+    // Wait until ready
     while (!(UCSR0A & _BV(RXC0)))
         ;
     return UDR0;
@@ -48,13 +47,10 @@ union calcNum
     float f;
 };
 
-//  dodawania, mnożenia i dzielenia czyli wszystkie
-
 int main()
 {
-    // zainicjalizuj UART
     uart_init();
-    // skonfiguruj strumienie wejścia/wyjścia
+    // Printf and scanf may be expensive, but it's much easier in a simple program
     fdev_setup_stream(&uart_file, uart_transmit, uart_receive, _FDEV_SETUP_RW);
     stdin = stdout = stderr = &uart_file;
 
@@ -95,7 +91,7 @@ int main()
             break;
 
         case 4:
-            // `można dla tych typów danych użyć 32-bitowego wejścia/wyjścia` wybrałem po prostu pole 32-bitowe zamiast ignorowania warningów, chyba ze chodziło o scanf %ld
+            // `32-bit input/output can be used for these data types` I simply selected the 32-bit field instead of ignoring the warnings, unless it was about scanf %ld
             scanf("%" SCNd32, &num1.d64);
             scanf("%" SCNd32, &num2.d64);
 
@@ -119,10 +115,10 @@ int main()
 }
 
 /*
-8-bitowe są realizowane szybkimi operajami na rejestrach, ale dzielenie wymaga użycia zewnętrznych długich funkcji jak __divmodhi4
-16-bitowe wymagają więcej operacji i rejestrów, ale ciągle są szybkie, oprócz dzielenia
-32-bitowe dodawanie wygląda normalnie, ale mnożenie korzysta dodatkowo z __mulsi3 a dzielenie z __divmodsi4
-floaty mają do wszystkiego własne operajcje: __addsf3 __mulsf3 __divsf3
+8-bit operations are performed using fast register operations, but division requires the use of external long functions such as __divmodhi4.
+16-bit operations require more operations and registers, but are still fast, except for division.
+32-bit addition looks normal, but multiplication additionally uses __mulsi3 and division uses __divmodsi4.
+floats have their own operations for everything: __addsf3 __mulsf3 __divsf3
 
-Ponieważ (z wykładu) jest stała ilość operacji na sekundę, ilość operacji = prędkość, więc te używające zewnętrznych funkcji są bardzo wolne
+Since (from the lecture) there is a constant number of operations per second, the number of operations = speed, so those using external functions are very slow
 */

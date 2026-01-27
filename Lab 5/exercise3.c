@@ -28,42 +28,43 @@ ISR(ADC_vect)
 
 void adc_init()
 {
-    ADMUX = _BV(REFS0) | _BV(MUX3) | _BV(MUX2) | _BV(MUX1); // referencja AVcc, wejście 1.1V
-    DIDR0 = 0xFF;                                           // wyłącz wejście cyfrowe na WSZYSTKIM
-    ADCSRA = _BV(ADPS0) | _BV(ADPS1) | _BV(ADPS2);          // preskaler 128
-    ADCSRA |= _BV(ADEN) | _BV(ADIE);                        // włącz ADC i przerwania
+    ADMUX = _BV(REFS0) | _BV(MUX3) | _BV(MUX2) | _BV(MUX1); // AVcc reference, 1.1V input
+    DIDR0 = 0xFF;                                           // Disable analog input on EVERYTHING
+
+    // ADC clock frequency: 125 kHz (16 MHz / 128)
+    ADCSRA = _BV(ADPS0) | _BV(ADPS1) | _BV(ADPS2); // prescaler 128
+    ADCSRA |= _BV(ADEN) | _BV(ADIE);               // enable ADC and Interrupt
 }
 
 FILE uart_file;
 
-#define BAUD 9600                              // baudrate
-#define UBRR_VALUE ((F_CPU) / 16 / (BAUD) - 1) // zgodnie ze wzorem
+#define BAUD 9600                              // Baudrate
+#define UBRR_VALUE ((F_CPU) / 16 / (BAUD) - 1) // From datasheet
 
-// inicjalizacja UART
 void uart_init()
 {
-    // ustaw baudrate
     UBRR0 = UBRR_VALUE;
-    // włącz odbiornik i nadajnik
+    UCSR0A = 0;
+    // Enable receiver and transmitter
     UCSR0B = _BV(RXEN0) | _BV(TXEN0);
-    // ustaw format 8n1
+    // 8n1 format
     UCSR0C = _BV(UCSZ00) | _BV(UCSZ01);
 }
 
-// transmisja jednego znaku
+// Transmit one character
 int uart_transmit(char data, FILE *stream)
 {
-    // czekaj aż transmiter gotowy
+    // Wait until ready
     while (!(UCSR0A & _BV(UDRE0)))
         ;
     UDR0 = data;
     return 0;
 }
 
-// odczyt jednego znaku
+// Receive one character
 int uart_receive(FILE *stream)
 {
-    // czekaj aż znak dostępny
+    // Wait until ready
     while (!(UCSR0A & _BV(RXC0)))
         ;
     return UDR0;
@@ -111,14 +112,14 @@ int main()
     fdev_setup_stream(&uart_file, uart_transmit, uart_receive, _FDEV_SETUP_RW);
     stdin = stdout = stderr = &uart_file;
 
-    // Ekwiwalent ustawienia SMCR
+    // Equivalent to setting SMCR
     set_sleep_mode(SLEEP_MODE_ADC);
 
     sei();
-    // Danie delayów w różnych miejscach daje różne dynamiki
+    // Adding delays in different places changes the dynamic
     while (1)
     {
-        UCSR0B &= ~(_BV(RXEN0) | _BV(TXEN0)); // wyłącz UART
+        UCSR0B &= ~(_BV(RXEN0) | _BV(TXEN0)); // disable UART
         mode = 0;
         cli();
         for (uint16_t i = 0; i < NUM_EVENTS; ++i)
@@ -147,10 +148,10 @@ int main()
 
         double var_red = var();
 
-        UCSR0B |= _BV(RXEN0) | _BV(TXEN0); // włącz UART z powrotem
+        UCSR0B |= _BV(RXEN0) | _BV(TXEN0); // enable UART
 
-        // Ogółem nie widać znaczącej poprawy, ale to może być problem z płytką/kablem/laptopem,
-        // inny program na tej płytce który działał na innej (miał poprawę widoczną) wskazuje że ten tryb jest gorszy
+        // Overall, there is no significant improvement, but this may be a problem with the board/cable/laptop,
+        // Another program on this board that worked on another laptop+cable (with visible improvement) indicates that this mode is worse
         printf("Var while polling: %lf\r\nVar while reducing noise:%lf\r\n\n", var_pol, var_red);
 
         _delay_ms(1000);

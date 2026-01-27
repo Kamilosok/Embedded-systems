@@ -1,9 +1,11 @@
+/*Kamil Zdancewicz 345320*/
+
 #include <avr/io.h>
 #include <stdio.h>
 #include <inttypes.h>
 
-#define BAUD 9600                              // baudrate
-#define UBRR_VALUE ((F_CPU) / 16 / (BAUD) - 1) // zgodnie ze wzorem
+#define BAUD 9600                              // Baudrate
+#define UBRR_VALUE ((F_CPU) / 16 / (BAUD) - 1) // From datasheet
 
 #define NUM_5V 1024UL
 #define V_REF_INTERNAL 1100UL
@@ -12,88 +14,74 @@
 #define LED_DDR DDRB
 #define LED_PORT PORTB
 
-// inicjalizacja UART
 void uart_init()
 {
-    // ustaw baudrate
     UBRR0 = UBRR_VALUE;
-    // włącz odbiornik i nadajnik
+    UCSR0A = 0;
+    // Enable receiver and transmitter
     UCSR0B = _BV(RXEN0) | _BV(TXEN0);
-    // ustaw format 8n1
+    // 8n1 format
     UCSR0C = _BV(UCSZ00) | _BV(UCSZ01);
 }
 
-// transmisja jednego znaku
+// Transmit one character
 int uart_transmit(char data, FILE *stream)
 {
-    // czekaj aż transmiter gotowy
+    // Wait until ready
     while (!(UCSR0A & _BV(UDRE0)))
         ;
     UDR0 = data;
     return 0;
 }
 
-// odczyt jednego znaku
+// Receive one character
 int uart_receive(FILE *stream)
 {
-    // czekaj aż znak dostępny
+    // Wait until ready
     while (!(UCSR0A & _BV(RXC0)))
         ;
     return UDR0;
 }
 
-// inicjalizacja ADC
+// ADC initialization
 void adc_init()
 {
-    ADMUX = _BV(REFS0); // referencja AVcc, wejście ADC0
-    DIDR0 = _BV(ADC0D); // wyłącz wejście cyfrowe na ADC0
-    // częstotliwość zegara ADC 125 kHz (16 MHz / 128)
-    ADCSRA = _BV(ADPS0) | _BV(ADPS1) | _BV(ADPS2); // preskaler 128
-    ADCSRA |= _BV(ADEN);                           // włącz ADC
-}
-
-uint32_t adc_measure()
-{
-    ADCSRA |= _BV(ADSC); // wykonaj konwersję
-    while (!(ADCSRA & _BV(ADIF)))
-        ;
-    ADCSRA |= _BV(ADIF); // wyczyść bit ADIF (pisząc 1!)
-    uint32_t v = ADC;    // weź zmierzoną wartość (0..1023)
-
-    return v;
+    ADMUX = _BV(REFS0); // AVcc reference, ADC0 input
+    DIDR0 = _BV(ADC0D); // Disable analog input on ADC0
+    // ADC clock frequency: 125 kHz (16 MHz / 128)
+    ADCSRA = _BV(ADPS0) | _BV(ADPS1) | _BV(ADPS2); // prescaler 28
+    ADCSRA |= _BV(ADEN);                           // enable ADC
 }
 
 FILE uart_file;
 
 int main()
 {
-    // zainicjalizuj UART
     uart_init();
-    // skonfiguruj strumienie wejścia/wyjścia
+
     fdev_setup_stream(&uart_file, uart_transmit, uart_receive, _FDEV_SETUP_RW);
     stdin = stdout = stderr = &uart_file;
 
     LED_DDR |= _BV(LED);
-    // zainicjalizuj ADC
     adc_init();
     while (1)
     {
 
-        // LED_PORT |= _BV(LED); // Turn on LED before converting
+        // LED_PORT |= _BV(LED); // Possibly turn on LED before converting
 
-        ADCSRA |= _BV(ADSC); // wykonaj konwersję
+        ADCSRA |= _BV(ADSC); //
 
         while (!(ADCSRA & _BV(ADIF)))
-            ; // czekaj na wynik
+            ; // Poll
 
-        // LED_PORT &= ~_BV(LED); // Turn off LED after converting
+        // LED_PORT &= ~_BV(LED); // Possibly turn off LED after converting
 
-        ADCSRA |= _BV(ADIF);                                // wyczyść bit ADIF (pisząc 1!)
-        uint32_t v = ADC;                                   // weź zmierzoną wartość (0..1023) ADLAR 0 bo nieustawiony nigdzie
-        uint64_t voltage_vcc = V_REF_INTERNAL * NUM_5V / v; // in millivolts
+        ADCSRA |= _BV(ADIF);                                // Erase ADIF (by writing 1!)
+        uint32_t v = ADC;                                   // Get the value
+        uint64_t voltage_vcc = V_REF_INTERNAL * NUM_5V / v; // In millivolts
 
         printf("Vcc: %.4f V (ADC=%lu)\r\n", (float)((double)voltage_vcc / 1000.0), v);
     }
 
-    // Z led bardziej stabilny?
+    // More stable with LED?
 }

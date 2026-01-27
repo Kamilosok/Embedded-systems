@@ -18,12 +18,9 @@ volatile uint8_t in_data = 0;
 
 void spi_slave_init()
 {
-    // MISO jako wyjście, reszta wejścia
+    // MISO as output, the rest as input
     DDRB |= _BV(PB4);                          // MISO
     DDRB &= ~(_BV(PB3) | _BV(PB5) | _BV(PB2)); // MOSI, SCK, SS
-
-    // Pull-up na SS
-    // PORTB |= _BV(PB2);
 
     // SPI enable + interrupt, slave
     SPCR = _BV(SPE) | _BV(SPIE);
@@ -42,11 +39,11 @@ void spi_slave_poll()
 
 int main()
 {
-    // LED jako wyjście
+    // LED output
     LED_DDR |= _BV(LED);
     LED_PORT &= ~_BV(LED);
 
-    // Przycisk jako wejście z pull-up
+    // Button pull-up input
     DDRD &= ~_BV(BTN);
     PORTD |= _BV(BTN);
 

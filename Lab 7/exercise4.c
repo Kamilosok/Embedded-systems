@@ -7,39 +7,35 @@
 #include <avr/io.h>
 #include <stdio.h>
 
-#define BAUD 9600                              // baudrate
-#define UBRR_VALUE ((F_CPU) / 16 / (BAUD) - 1) // zgodnie ze wzorem
+#define BAUD 9600                              // Baudrate
+#define UBRR_VALUE ((F_CPU) / 16 / (BAUD) - 1) // From datasheet
 
-// inicjalizacja UART
 void uart_init()
 {
-    // ustaw baudrate
     UBRR0 = UBRR_VALUE;
-    // wyczyść rejestr UCSR0A
     UCSR0A = 0;
-    // włącz odbiornik i nadajnik
+    // Enable receiver and transmitter
     UCSR0B = _BV(RXEN0) | _BV(TXEN0);
-    // ustaw format 8n1
+    // 8n1 format
     UCSR0C = _BV(UCSZ00) | _BV(UCSZ01);
 }
 
-// transmisja jednego znaku
+// Transmit one character
 int uart_transmit(char data, FILE *stream)
 {
-    // czekaj aż transmiter gotowy
+    // Wait until ready
     while (!(UCSR0A & _BV(UDRE0)))
         ;
     UDR0 = data;
     return 0;
 }
 
-// odczyt jednego znaku
+// Receive one character
 int uart_receive(FILE *stream)
 {
-    // czekaj aż znak dostępny
+    // Wait until ready
     while (!(UCSR0A & _BV(RXC0)))
         ;
-
     return UDR0;
 }
 
@@ -50,28 +46,26 @@ volatile uint8_t spi_in = 0;
 // inicjalizacja SPI
 void spi_init()
 {
-    // SS, MOSI, SCK jako wejścia
+    // SS, MOSI, SCK as output
     DDRB &= ~(_BV(DDB2) | _BV(DDB3) | _BV(DDB5));
 
-    // MISO na wyjście, ale i tak nie używamy
+    // MISO output for future reference, even if we aren't using it now
     DDRB |= _BV(DDB4);
 
     // Pull-up
     PORTB |= _BV(PB2) | _BV(PB3) | _BV(PB5);
 
     DDRD |= _BV(PD4) | _BV(PD5) | _BV(PD6);
-    // Od prawej -> SS, SCK, MOSI, MISO
+    // From the right -> SS, SCK, MOSI, MISO
     PORTD |= _BV(PD4) | _BV(PD5) | _BV(PD6) | _BV(PD7);
 
-    // włącz SPI w trybie slave, bez zegara, interrupt
+    // Enable SPI in slave mode, without clock, interrupt
     SPCR = _BV(SPE) | _BV(SPIE);
 }
 
 ISR(SPI_STC_vect)
 {
     spi_in = SPDR;
-
-    // SPDR = spi_in + 1;
 }
 
 ISR(TIMER1_COMPA_vect)
@@ -81,7 +75,6 @@ ISR(TIMER1_COMPA_vect)
 
 void timer_init()
 {
-    // ustaw tryb licznika
     // CTC
     TCCR1B = _BV(WGM12);
     // Prescaler 8
@@ -94,7 +87,7 @@ void timer_init()
     OCR1A = 31;
 }
 
-// transfer jednego bajtu
+// Transfer one byte
 void bitbang_send(uint8_t data)
 {
     // SS
@@ -102,7 +95,7 @@ void bitbang_send(uint8_t data)
 
     for (uint8_t i = 0; i < 8; i++)
     {
-        // Od najważniejszych bitów
+        // From the most significant bits
         if (data & 0x80)
         {
             PORTD |= _BV(PD6);

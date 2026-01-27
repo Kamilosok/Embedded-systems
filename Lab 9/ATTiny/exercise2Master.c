@@ -18,21 +18,18 @@ ISR(TIM0_COMPA_vect)
     ;
 }
 
-// inicjalizacja SPI
 void usi_spi_init()
 {
-    // In / Out, oznaczenia MOSI/MISO nie mają znaczenia, tylko DI/DO
+    // Data In/Data Out
     DDRA |= _BV(PA5) | _BV(PA4);
     DDRA &= ~_BV(PA6);
 
-    // Pull-up na DI magicznie sprawia, że nie działa
-    // PORTA |= _BV(PA6);
+    // Pull-up on Data In breaks the input?
 
-    // SCK i DO na stan niski
+    // SCK and DO low
     PORTA &= ~_BV(PA4);
     PORTA &= ~_BV(PA5);
 
-    // Three wire mode
     // 3-wire mode, clock source = Timer0 Compare Match
     USICR = _BV(USIWM0) | _BV(USICS1) | _BV(USICLK);
 }
@@ -40,19 +37,17 @@ void usi_spi_init()
 void timer0_init()
 {
     TCCR0A = _BV(WGM01); // CTC
-    TCCR0B = _BV(CS00);  // preslaler 1
+    TCCR0B = _BV(CS00);  // prescaler 1
     TIMSK0 |= _BV(OCIE0A);
 
     OCR0A = 31; // 125 kHz
 }
 
-// Synchronicznie więc bez volatile na zewnątrz
-
 uint8_t usi_spi_transfer(uint8_t data)
 {
     USIDR = data;
 
-    // Daje trochę więcej kontroli
+    // This way gives more control IMO
     USISR = _BV(USIOIF);
     while (!(USISR & _BV(USIOIF)))
     {
@@ -90,8 +85,6 @@ int main()
         {
             out = 0xFF;
         }
-
-        // out = 0xFF;
 
         uint8_t data = usi_spi_transfer(out);
 

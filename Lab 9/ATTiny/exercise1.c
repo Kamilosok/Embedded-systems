@@ -50,7 +50,7 @@ void timer_init()
     TCCR0A = _BV(WGM01);
     TCCR0B = 0;
 
-    // Preskaler 64
+    // Prescaler 64
     TCCR0B |= _BV(CS01) | _BV(CS00);
 
     // Interrupt
@@ -65,12 +65,12 @@ int main()
 
     LED_DDR |= _BV(LED);
 
-    // Pull-up chyba nie istnieje
+    // Pull-up
     PORTA |= _BV(PORTA7);
 
     timer_init();
     set_sleep_mode(SLEEP_MODE_IDLE);
-    //   odmaskuj przerwania
+
     sei();
 
     while (1)

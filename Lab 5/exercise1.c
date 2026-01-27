@@ -21,7 +21,9 @@ static volatile uint8_t history[BUF_SIZE];
 static volatile uint8_t read_id = 0;
 static volatile uint8_t write_id = 100;
 /*
-Działało gorzej ze sprawdzaniem naciśnięcia w ten sposób
+Worked worse with button checking this way, left for education purposes
+
+
 static volatile uint8_t curr_state = 0;
 static volatile uint8_t pressed_this_cycle = 0;
 
@@ -66,21 +68,9 @@ ISR(TIMER1_COMPA_vect)
     // pressed_this_cycle = 0;
     next_cycle();
 }
-/*
-void int_init()
-{
-    // ustaw pull-up na PD2 (INT0)
-    PORTD |= _BV(PORTD2);
-    // Any logical change
-    EICRA |= _BV(ISC00);
-    // odmaskuj przerwania dla INT0
-    EIMSK |= _BV(INT0);
-}
-*/
 
 void timer_init()
 {
-    // ustaw tryb licznika
     // CTC
     TCCR1B = _BV(WGM12);
     // Prescaler 64
@@ -89,7 +79,7 @@ void timer_init()
     // Compare match A int
     TIMSK1 = (_BV(OCIE1A));
 
-    // Z wzoru datasheetowego
+    // From datasheet
     OCR1A = 2499;
 }
 
@@ -97,13 +87,13 @@ int main()
 {
 
     LED_DDR |= _BV(LED);
-    // ustaw pull-up na PD2 (INT0)
+    // Pull-up
     PORTD |= _BV(PORTD2);
     // int_init();
 
     timer_init();
     set_sleep_mode(SLEEP_MODE_IDLE);
-    //  odmaskuj przerwania
+
     sei();
 
     while (1)

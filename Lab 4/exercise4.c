@@ -4,7 +4,7 @@
 #include <inttypes.h>
 #include <util/delay.h>
 
-#define OCR1A_VAL 210 // From fig 16-6 to get ~39.7Khz
+#define OCR1A_VAL 210 // From fig 16-6 of datasheet to get ~39.7Khz
 #define PULSE_LEN 600 // in us
 #define PULSE_COUNT 6
 #define BREAK_LEN 100 // in ms
@@ -23,8 +23,8 @@ void ctc_init()
 {
     DDRB |= _BV(PB1);
 
-    // WGM12 - CTC
-    // CS1   = 001  -- prescaler 1
+    // WGM12 1 - CTC
+    // CS10 1 - prescaler 1
     TCCR1B = _BV(WGM12) | _BV(CS10);
     toggle_OC1A(1);
     OCR1A = OCR1A_VAL;

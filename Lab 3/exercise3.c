@@ -1,3 +1,5 @@
+/*Kamil Zdancewicz 345320*/
+
 #include <avr/io.h>
 #include <inttypes.h>
 #include <avr/pgmspace.h>
@@ -21,27 +23,27 @@ void delay_us_runtime(uint32_t us)
     }
 }
 
-// inicjalizacja ADC
+// ADC initialization
 void adc_init()
 {
-    ADMUX = _BV(REFS0); // referencja AVcc, wejście ADC0
-    DIDR0 = _BV(ADC0D); // wyłącz wejście cyfrowe na ADC0
-    // częstotliwość zegara ADC 125 kHz (16 MHz / 128)
-    ADCSRA = _BV(ADPS0) | /*_BV(ADPS1) |*/ _BV(ADPS2); // preskaler 32
-    ADCSRA |= _BV(ADEN);                               // włącz ADC
+    ADMUX = _BV(REFS0); // AVcc reference, ADC0 input
+    DIDR0 = _BV(ADC0D); // Disable analog input on ADC0
+    // ADC clock frequency: 125 kHz (16 MHz / 128)
+    ADCSRA = _BV(ADPS0) | _BV(ADPS1) | _BV(ADPS2); // prescaler 28
+    ADCSRA |= _BV(ADEN);                           // enable ADC
 }
 
 uint32_t adc_measure()
 {
-    LED_PORT &= ~_BV(LED);
-    ADCSRA |= _BV(ADSC); // wykonaj konwersję
+    ADCSRA |= _BV(ADSC); // Convert and poll
     while (!(ADCSRA & _BV(ADIF)))
         ;
-    ADCSRA |= _BV(ADIF); // wyczyść bit ADIF (pisząc 1!)
-    uint32_t v = ADC;    // weź zmierzoną wartość (0..1023)
+    ADCSRA |= _BV(ADIF); // Erase ADIF (by writing 1!)
+    uint32_t v = ADC;    // Get value [0,1023]
 
     return v;
 }
+
 const uint16_t gamma_table[1024] PROGMEM = {
     0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0,
@@ -198,7 +200,7 @@ void ledCycle(uint32_t v)
 int main()
 {
     LED_DDR |= _BV(LED);
-    // zainicjalizuj ADC
+
     adc_init();
 
     while (1)
