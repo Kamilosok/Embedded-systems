@@ -35,7 +35,7 @@ void ctc_init()
 void adc_init()
 {
     ADMUX = _BV(REFS0); // AVcc reference, ADC0 input
-    DIDR0 = _BV(ADC0D); // Disable analog input on ADC0
+    DIDR0 = _BV(ADC0D); // Disable digital input on ADC0
     // ADC clock frequency: 500 kHz (16 MHz / 32)
     ADCSRA = _BV(ADPS0) | /*_BV(ADPS1) |*/ _BV(ADPS2); // prescaler 32
     ADCSRA |= _BV(ADEN);                               // enable ADC

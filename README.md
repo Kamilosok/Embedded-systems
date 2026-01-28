@@ -8,7 +8,7 @@ We were working on a slightly modified **ATMega328P** and **ATtiny84A** with oth
 
 ## Structure
 
-Each Lab folder contains the exercise list as the `README.md` file, solutions to exercises with names `exerciseX.c` (except [Lab 10](./Lab%2010/)) with X being the name of the exercise and a Makefile, exercises of most Labs can be compiled and instaled using the method below.
+Each Lab folder contains the exercise list as the `README.md` file, solutions to exercises with names `exerciseX.c` (except [Lab 9](./Lab%209/)) with X being the name of the exercise and a Makefile, exercises of most Labs can be compiled and instaled using the method below.
 
 ## Standard compilation and installation
 
