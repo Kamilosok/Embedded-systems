@@ -28,6 +28,11 @@ $(TARGET).elf: $(TARGET).c
 $(TARGET).hex: $(TARGET).elf
 	$(OBJCOPY) -O ihex -R .eeprom $< $@
 
+lst:  $(TARGET).lst
+
+%.lst: %.elf
+	avr-objdump -h -S $< > $@
+
 # Install
 install: $(TARGET).hex
 	$(AVRDUDE) -p $(MCU) -c arduino -P $(PORT) -b $(BAUD) -v -U flash:w:$(TARGET).hex
@@ -38,4 +43,4 @@ screen:
 
 # Clean
 clean:
-	rm -f $(TARGET).elf $(TARGET).hex $(TARGET).map
+	rm -f $(TARGET).elf $(TARGET).hex $(TARGET).map $(TARGET).lst

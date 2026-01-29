@@ -1,0 +1,164 @@
+{
+  "uuid": "435d0fdabecb56bb4ce64cd1cdca9c53",
+  "path": "Offline/Embedded-systems-course",
+  "name": "Embedded-systems-course",
+  "content": "",
+  "created_at": "2026-01-29 14:53:52",
+  "updated_at": "2026-01-29 15:13:28",
+  "stick": "",
+  "documents": [
+    {
+      "uuid": "fccf8ebbce8770365286a6ddca68dd0b",
+      "title": "KITT LIGHTS",
+      "description": "",
+      "docType": "1",
+      "master": "",
+      "thumb": "/images/thumb-default.png",
+      "components": {
+        "089009af89ec456fb76a36eebfae7cd9": 10,
+        "bb009484ef804a24ac5d18c54b249586": 8
+      },
+      "BOM": [
+        [
+          "Value",
+          "Quantity",
+          "Package",
+          "Components",
+          "CustomPara"
+        ],
+        [
+          "220Ω",
+          8,
+          "R0603",
+          "2,3,4,5,6,7,8,9",
+          {
+            "Manufacturer Part": "",
+            "Manufacturer": "",
+            "Supplier": "",
+            "Supplier Part": ""
+          }
+        ],
+        [
+          "32LED-RED",
+          10,
+          "LED-TH_L5..8-W5.6-P2.54_32LED-RED",
+          "U1,U2,U3,U4,U5,U6,U7,U8,U9,U10",
+          {
+            "Manufacturer Part": "32LED-RED",
+            "Manufacturer": "Grayhill",
+            "Supplier": "LCSC",
+            "Supplier Part": "C3306983"
+          }
+        ]
+      ],
+      "updateTime": 1769696008,
+      "createTime": 1769694832,
+      "histories": [],
+      "created_at": "2026-01-29 14:53:52",
+      "updated_at": "2026-01-29 15:13:28"
+    },
+    {
+      "uuid": "ddf5a2a54da4921106d073aba678bcc5",
+      "title": "0-9 Clock",
+      "description": "",
+      "docType": "1",
+      "master": "",
+      "thumb": "/images/thumb-default.png",
+      "components": {},
+      "BOM": [
+        [
+          "Value",
+          "Quantity",
+          "Package",
+          "Components",
+          "CustomPara"
+        ],
+        [
+          "220Ω",
+          8,
+          "R0603",
+          "2,3,4,5,6,7,8,9",
+          {
+            "Manufacturer Part": "",
+            "Manufacturer": "",
+            "Supplier": "",
+            "Supplier Part": ""
+          }
+        ],
+        [
+          "32LED-RED",
+          10,
+          "LED-TH_L5..8-W5.6-P2.54_32LED-RED",
+          "U1,U2,U3,U4,U5,U6,U7,U8,U9,U10",
+          {
+            "Manufacturer Part": "32LED-RED",
+            "Manufacturer": "Grayhill",
+            "Supplier": "LCSC",
+            "Supplier Part": "C3306983"
+          }
+        ]
+      ],
+      "updateTime": 1769695067,
+      "createTime": 1769694832,
+      "histories": [],
+      "created_at": "2026-01-29 14:53:52",
+      "updated_at": "2026-01-29 14:57:47"
+    },
+    {
+      "uuid": "2ccc391c266697c42d16e656327baf52",
+      "title": "Test",
+      "description": "",
+      "docType": "1",
+      "master": "",
+      "thumb": "/images/thumb-default.png",
+      "components": {},
+      "BOM": [
+        [
+          "Value",
+          "Quantity",
+          "Package",
+          "Components",
+          "CustomPara"
+        ],
+        [
+          "220Ω",
+          8,
+          "R0603",
+          "2,3,4,5,6,7,8,9",
+          {
+            "Manufacturer Part": "",
+            "Manufacturer": "",
+            "Supplier": "",
+            "Supplier Part": ""
+          }
+        ],
+        [
+          "32LED-RED",
+          10,
+          "LED-TH_L5..8-W5.6-P2.54_32LED-RED",
+          "U1,U2,U3,U4,U5,U6,U7,U8,U9,U10",
+          {
+            "Manufacturer Part": "32LED-RED",
+            "Manufacturer": "Grayhill",
+            "Supplier": "LCSC",
+            "Supplier Part": "C3306983"
+          }
+        ]
+      ],
+      "updateTime": 1769694832,
+      "createTime": 1769694832,
+      "histories": [],
+      "created_at": "2026-01-29 14:53:52",
+      "updated_at": "2026-01-29 14:53:52"
+    }
+  ],
+  "sort": [
+    "fccf8ebbce8770365286a6ddca68dd0b",
+    "ddf5a2a54da4921106d073aba678bcc5",
+    "2ccc391c266697c42d16e656327baf52"
+  ],
+  "title": "Embedded-systems-course",
+  "foldername": "Embedded-systems-course",
+  "schfilename": "Embedded-systems-course.json",
+  "schfilemtime": 1769696008360
+}
