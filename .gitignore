@@ -58,3 +58,5 @@ dkms.conf
 *.pdf
 *.txt
 *.json
+
+!Schematics/*.json

@@ -4,7 +4,7 @@
   "name": "Embedded-systems-course",
   "content": "",
   "created_at": "2026-01-29 14:53:52",
-  "updated_at": "2026-01-29 15:13:28",
+  "updated_at": "2026-01-29 20:24:23",
   "stick": "",
   "documents": [
     {
@@ -64,7 +64,10 @@
       "docType": "1",
       "master": "",
       "thumb": "/images/thumb-default.png",
-      "components": {},
+      "components": {
+        "089009af89ec456fb76a36eebfae7cd9": 16,
+        "bb009484ef804a24ac5d18c54b249586": 8
+      },
       "BOM": [
         [
           "Value",
@@ -86,10 +89,22 @@
           }
         ],
         [
+          "1k",
+          8,
+          "R0603",
+          "R1,R2,R3,R4,R5,R6,R7,R8",
+          {
+            "Manufacturer Part": "",
+            "Manufacturer": "",
+            "Supplier": "",
+            "Supplier Part": ""
+          }
+        ],
+        [
           "32LED-RED",
-          10,
+          26,
           "LED-TH_L5..8-W5.6-P2.54_32LED-RED",
-          "U1,U2,U3,U4,U5,U6,U7,U8,U9,U10",
+          "U1,U2,U3,U4,U5,U6,U7,U8,U9,U10,U11,U12,U13,U14,U15,U16,U17,U18,U20,U21,U22,U23,U24,U25,U26,U27",
           {
             "Manufacturer Part": "32LED-RED",
             "Manufacturer": "Grayhill",
@@ -98,11 +113,11 @@
           }
         ]
       ],
-      "updateTime": 1769695067,
+      "updateTime": 1769714663,
       "createTime": 1769694832,
       "histories": [],
       "created_at": "2026-01-29 14:53:52",
-      "updated_at": "2026-01-29 14:57:47"
+      "updated_at": "2026-01-29 20:24:23"
     },
     {
       "uuid": "2ccc391c266697c42d16e656327baf52",
@@ -160,5 +175,5 @@
   "title": "Embedded-systems-course",
   "foldername": "Embedded-systems-course",
   "schfilename": "Embedded-systems-course.json",
-  "schfilemtime": 1769696008360
+  "schfilemtime": 1769714663253
 }

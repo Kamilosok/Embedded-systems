@@ -32,7 +32,7 @@ The solution is in [exercise2.c](exercise2.c)
 
 Connect the 7-segment display [FJ5261B](https://documents.tme.eu/v7/_solaris-tep_/pVersion=0046&contRep=ZT&docId=005056AB752F1ED4999780C3FFA0C1EC&compId=LDD056BUE-101.pdf?ci_sign=e7374f177375dba15039bf7f7bea7e2fdb06efe0) as follows using $220 \Omega$ resistors, improper connection **may damage the display!**
 
-TODO: Schematic here
+![0-9 Clock](../Schematics/0-9_Clock.png)
 
 Write a program that counts from 0 to 9 and displays the number using the display. Displaying the number should be done by writing once to the proper register, so the needed values for showing the numbers should be cached.
 
