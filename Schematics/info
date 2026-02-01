@@ -4,7 +4,7 @@
   "name": "Embedded-systems-course",
   "content": "",
   "created_at": "2026-01-29 14:53:52",
-  "updated_at": "2026-01-29 20:24:23",
+  "updated_at": "2026-02-01 16:21:55",
   "stick": "",
   "documents": [
     {
@@ -89,10 +89,34 @@
           }
         ],
         [
+          "2N3906(TO-92)",
+          2,
+          "TO-92-3_L4.9-W3.7-P1.27-L",
+          "Q1,Q2",
+          {
+            "Manufacturer Part": "2N3906",
+            "Manufacturer": "CJ",
+            "Supplier": "LCSC",
+            "Supplier Part": "C9809"
+          }
+        ],
+        [
           "1k",
-          8,
+          17,
           "R0603",
-          "R1,R2,R3,R4,R5,R6,R7,R8",
+          "R1,R2,R3,R4,R5,R6,R7,R8,R9,R10,R11,R12,R13,R14,R15,R16,R18",
+          {
+            "Manufacturer Part": "",
+            "Manufacturer": "",
+            "Supplier": "",
+            "Supplier Part": ""
+          }
+        ],
+        [
+          "2.2 kΩ",
+          1,
+          "R0603",
+          "R17",
           {
             "Manufacturer Part": "",
             "Manufacturer": "",
@@ -102,9 +126,9 @@
         ],
         [
           "32LED-RED",
-          26,
+          42,
           "LED-TH_L5..8-W5.6-P2.54_32LED-RED",
-          "U1,U2,U3,U4,U5,U6,U7,U8,U9,U10,U11,U12,U13,U14,U15,U16,U17,U18,U20,U21,U22,U23,U24,U25,U26,U27",
+          "U1,U2,U3,U4,U5,U6,U7,U8,U9,U10,U11,U12,U13,U14,U15,U16,U17,U18,U19,U20,U21,U22,U23,U24,U25,U26,U27,U28,U29,U30,U31,U32,U33,U34,U35,U36,U37,U38,U39,U40,U41,U42",
           {
             "Manufacturer Part": "32LED-RED",
             "Manufacturer": "Grayhill",
@@ -113,20 +137,24 @@
           }
         ]
       ],
-      "updateTime": 1769714663,
+      "updateTime": 1769958797,
       "createTime": 1769694832,
       "histories": [],
       "created_at": "2026-01-29 14:53:52",
-      "updated_at": "2026-01-29 20:24:23"
+      "updated_at": "2026-02-01 16:13:17"
     },
     {
-      "uuid": "2ccc391c266697c42d16e656327baf52",
-      "title": "Test",
+      "uuid": "8e28ba4a91327c05e284f326851992de",
+      "title": "0-99 Clock",
       "description": "",
       "docType": "1",
       "master": "",
       "thumb": "/images/thumb-default.png",
-      "components": {},
+      "components": {
+        "bb009484ef804a24ac5d18c54b249586": 10,
+        "089009af89ec456fb76a36eebfae7cd9": 16,
+        "eb4b9aee9bd548aaa0d8f2be9fe0b10f": 2
+      },
       "BOM": [
         [
           "Value",
@@ -148,10 +176,46 @@
           }
         ],
         [
+          "2N3906(TO-92)",
+          2,
+          "TO-92-3_L4.9-W3.7-P1.27-L",
+          "Q1,Q2",
+          {
+            "Manufacturer Part": "2N3906",
+            "Manufacturer": "CJ",
+            "Supplier": "LCSC",
+            "Supplier Part": "C9809"
+          }
+        ],
+        [
+          "1k",
+          17,
+          "R0603",
+          "R1,R2,R3,R4,R5,R6,R7,R8,R9,R10,R11,R12,R13,R14,R15,R16,R18",
+          {
+            "Manufacturer Part": "",
+            "Manufacturer": "",
+            "Supplier": "",
+            "Supplier Part": ""
+          }
+        ],
+        [
+          "2.2 kΩ",
+          1,
+          "R0603",
+          "R17",
+          {
+            "Manufacturer Part": "",
+            "Manufacturer": "",
+            "Supplier": "",
+            "Supplier Part": ""
+          }
+        ],
+        [
           "32LED-RED",
-          10,
+          42,
           "LED-TH_L5..8-W5.6-P2.54_32LED-RED",
-          "U1,U2,U3,U4,U5,U6,U7,U8,U9,U10",
+          "U1,U2,U3,U4,U5,U6,U7,U8,U9,U10,U11,U12,U13,U14,U15,U16,U17,U18,U19,U20,U21,U22,U23,U24,U25,U26,U27,U28,U29,U30,U31,U32,U33,U34,U35,U36,U37,U38,U39,U40,U41,U42",
           {
             "Manufacturer Part": "32LED-RED",
             "Manufacturer": "Grayhill",
@@ -160,20 +224,20 @@
           }
         ]
       ],
-      "updateTime": 1769694832,
-      "createTime": 1769694832,
+      "updateTime": 1769959315,
+      "createTime": 1769958233,
       "histories": [],
-      "created_at": "2026-01-29 14:53:52",
-      "updated_at": "2026-01-29 14:53:52"
+      "created_at": "2026-02-01 16:03:53",
+      "updated_at": "2026-02-01 16:21:55"
     }
   ],
   "sort": [
     "fccf8ebbce8770365286a6ddca68dd0b",
     "ddf5a2a54da4921106d073aba678bcc5",
-    "2ccc391c266697c42d16e656327baf52"
+    "8e28ba4a91327c05e284f326851992de"
   ],
   "title": "Embedded-systems-course",
   "foldername": "Embedded-systems-course",
   "schfilename": "Embedded-systems-course.json",
-  "schfilemtime": 1769714663253
+  "schfilemtime": 1769959315592
 }

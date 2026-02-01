@@ -6,17 +6,17 @@ Write a program translating text to Morse code. Input text should be read throug
 
 ### Solution E1
 
-The solution is in [exercise1.c](exercise1.c)
+The solution is in [`exercise1.c`](exercise1.c)
 
 ## Exercise 2: KITT lights
 
-Connect a $220 \Omega$ resistor ladder and an LED ruler like in the schematic below:
+Connect a $220 \Omega$ resistor ladder and an LED bar graph like in the schematic below:
 
 ![KITT schematic](../Schematics/KITT_LIGHTS.png)
 
 Be careful to connect the first pin of the ladder (designated with a dot) to GND, improper connection **may damage the LED ruler!**
 
-With this setup achieve a scrolling LED effect like [KITT light](https://www.youtube.com/watch?v=54O_1mOab4Y) from "Knight Rider". Using pins from one port makes it easier because You can use bit operations to simplify operations. By default `PD0` and `PD1` pins are used by UART, so before using them for this exercise you may need to disable them for that purpose by using:
+With this setup achieve a scrolling LED effect like [KITT light](https://www.youtube.com/watch?v=54O_1mOab4Y) from "Knight Rider". Using pins from one port makes it easier because You can use bitwise operations to simplify operations. By default `PD0` and `PD1` pins are used by UART, so before using them for this exercise you may need to disable them for that purpose by using:
 
 ```c
 UCSR0B &= ~_BV(RXEN0) & ~_BV(TXEN0);
@@ -26,7 +26,7 @@ UCSR0B &= ~_BV(RXEN0) & ~_BV(TXEN0);
 
 ### Solution E2
 
-The solution is in [exercise2.c](exercise2.c)
+The solution is in [`exercise2.c`](exercise2.c)
 
 ## Exercise 3: 0-9 Clock
 
@@ -38,7 +38,7 @@ Write a program that counts from 0 to 9 and displays the number using the displa
 
 ### Solution E3
 
-The solution is in [exercise3.c](exercise3.c)
+The solution is in [`exercise3.c`](exercise3.c)
 
 ## Exercise 4: Arithmetic analysis
 
@@ -50,7 +50,7 @@ Using `make lst` generate a `.lst` containing the result code saved in a format 
 
 ### Solution E4
 
-The solution is in [exercise4.c](exercise4.c)
+The solution is in [`exercise4.c`](exercise4.c)
 
 > **Source:**
 > This list of problems was assigned as part of the *Embedded Systems* (SW) course in the 2025/26 Winter semester at University of Wrocław by [tilk](https://github.com/tilk)
