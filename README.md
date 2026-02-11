@@ -10,7 +10,7 @@ We were working on a slightly modified **ATMega328P** and **ATtiny84A** with oth
 
 Each Lab folder contains the exercise list as the `README.md` file, solutions to exercises with names `exerciseX.c` (except [Lab 9](./Lab%209/)) with X being the name of the exercise and a Makefile, exercises of most Labs can be compiled and instaled using the method below.
 
-Additionally, the [Schematics](./Schematics/) folder contains an *EasyEDA* project with all shown schematics along with `.png` files for quick Github display.
+Additionally, the [Schematics](./Schematics/) folder contains `.tex` files which can be compiled to circuits shown along with `.svg` files for quick Github display.
 
 ## Standard compilation and installation
 

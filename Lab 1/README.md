@@ -10,11 +10,13 @@ The solution is in [`exercise1.c`](exercise1.c)
 
 ## Exercise 2: KITT lights
 
-Connect a $220 \Omega$ resistor ladder and an LED bar graph like in the schematic below:
+Connect a $220 \Omega$ resistor array and an LED bar graph like in the schematic below:
 
-![KITT schematic](../Schematics/KITT_LIGHTS.png)
+<p align="center">
+  <img src="../Schematics/KITT_Lights.svg" alt="KITT schematic">
+</p>
 
-Be careful to connect the first pin of the ladder (designated with a dot) to GND, improper connection **may damage the LED ruler!**
+Be careful to connect the first pin of the array (designated with a dot) to GND, improper connection **may damage the LED bar graph!**
 
 With this setup achieve a scrolling LED effect like [KITT light](https://www.youtube.com/watch?v=54O_1mOab4Y) from "Knight Rider". Using pins from one port makes it easier because You can use bitwise operations to simplify operations. By default `PD0` and `PD1` pins are used by UART, so before using them for this exercise you may need to disable them for that purpose by using:
 
@@ -30,9 +32,11 @@ The solution is in [`exercise2.c`](exercise2.c)
 
 ## Exercise 3: 0-9 Clock
 
-Connect the 7-segment display [FJ5261B](https://documents.tme.eu/v7/_solaris-tep_/pVersion=0046&contRep=ZT&docId=005056AB752F1ED4999780C3FFA0C1EC&compId=LDD056BUE-101.pdf?ci_sign=e7374f177375dba15039bf7f7bea7e2fdb06efe0) as follows using $220 \Omega$ resistors, improper connection **may damage the display!**
+Connect the 7-segment display (like [FJ5261B](https://documents.tme.eu/v7/_solaris-tep_/pVersion=0046&contRep=ZT&docId=005056AB752F1ED4999780C3FFA0C1EC&compId=LDD056BUE-101.pdf?ci_sign=e7374f177375dba15039bf7f7bea7e2fdb06efe0)) as follows using $220 \Omega$ resistors, improper connection **may damage the display!**
 
-![0-9 Clock](../Schematics/0-9_Clock.png)
+<p align="center">
+  <img src="../Schematics/0-9_Clock.svg" alt="0-9 Clock schematic">
+</p>
 
 Write a program that counts from 0 to 9 and displays the number using the display. Displaying the number should be done by writing once to the proper register, so the needed values for showing the numbers should be cached.
 

@@ -1,0 +1,61 @@
+\documentclass[tikz,border=2pt]{standalone}
+\usepackage[european]{circuitikz}
+\usepackage{siunitx}
+
+\usetikzlibrary{backgrounds}
+
+\begin{document}
+\begin{circuitikz}[scale=1.5, transform shape, thick, font=\Large]
+
+    % Manual bounding box setting
+    \draw[use as bounding box] (-11.0,-1) rectangle (13.5,7.0);
+
+    % To see it on github
+    \begin{scope}[on background layer]
+        \fill[white] (-11.0,-1) rectangle (13.5,7.0);
+    \end{scope}
+
+
+
+    % #1 - x shift of block
+    % #2 - 0 - only LED, 1 - LED + resistor + pins
+    % #3 - list of x/num pairs for LEDs, e.g. 0/16, 1/15 
+    \newcommand{\LedBlock}[3]{
+        
+        % Wire going up with open dot and 5V label
+        \ifnum#2=1
+            \draw ({#1-10},5) to[short, -o] node[right]{14} ({#1-10},5.5) node[above]{5V};
+        \else
+            \draw ({#1-10},5) to[short, -o] node [right]{13}({#1-10},5.5);
+        \fi
+
+        % Common anode
+        \draw ({#1-10},5) -- ({#1-10+7*1.5},5);
+
+        \foreach \x/\num in {#3} {
+            % LEDs
+            \draw
+                ({#1-10+\x*1.5},5)
+                to[led, o-o] ({#1-10+\x*1.5},3.5) node[right]{\num};
+
+            % Resistors + pins
+            \ifnum#2=1
+                \draw
+                    ({#1-10+\x*1.5},3.5)
+                    to[R, o-*] ({#1-10+\x*1.5},1)
+                    node[below]{PD\x};
+            \fi
+        }
+        
+
+    }
+    
+
+    \LedBlock{0}{1}{0/16,1/15,2/3,3/2,4/1,5/18,6/17,7/4}
+
+    \LedBlock{12}{0}{0/11,1/10,2/8,3/6,4/5,5/12,6/7,7/9}
+
+
+
+\end{circuitikz}
+\end{document}

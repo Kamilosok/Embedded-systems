@@ -1,0 +1,44 @@
+\documentclass[tikz,border=2pt]{standalone}
+\usepackage[european]{circuitikz}
+\usepackage{siunitx}
+
+\usetikzlibrary{backgrounds}
+
+\begin{document}
+\begin{circuitikz}[scale=1.5, transform shape, thick, font=\Large]
+
+    % Manual bounding box setting
+    \draw[use as bounding box] (-11.0,-0.5) rectangle (6.5,7.0);
+
+    % To see it on github
+    \begin{scope}[on background layer]
+        \fill[white] (-11.0,-0.5) rectangle (6.5,7.0);
+    \end{scope}
+
+  % Main part of the circuit
+  \foreach \x in {0,...,9} {
+    \ifnum\x<8
+        \draw
+            ({-8+\x*1.5},6) node[above]{PD\x}
+            to[short, o-o] ({-8+\x*1.5},5)
+            to[led, o-o] ({-8+\x*1.5},3) node[right]{\the\numexpr\x+2\relax}
+            to[R, o-*] ({-8+\x*1.5},0) node[below]{};
+    \else
+        \draw
+            ({-8+\x*1.5},5)
+            to[led, o-o] ({-8+\x*1.5},3) node[right]{};
+    \fi
+  }
+
+  % Boxes showing LED bar graph and resistor array
+  \draw[dashed] (-8.5,5.5) rectangle (6.25, 3.6);
+  \draw[dashed] (-10,3.5) rectangle (3.25,-0.2);
+  
+  % Common ground
+  \draw
+    (2.5, 0) -- (-9.5,0)
+    to (-9.5, 3) node[ocirc, label=right:1]{}
+    to (-10.5,3) node[ground]{};
+
+\end{circuitikz}
+\end{document}
