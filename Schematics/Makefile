@@ -1,4 +1,4 @@
-TARGET = KITT_Lights
+TARGET = 0-99_Clock
 
 all: $(TARGET).svg
 

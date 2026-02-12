@@ -24,9 +24,11 @@
         
         % Wire going up with open dot and 5V label
         \ifnum#2=1
-            \draw ({#1-10},5) to[short, -o] node[right]{14} ({#1-10},5.5) node[above]{5V};
+            \draw ({#1-10},5) 
+            to[short,-o] ({#1-10},5.5) node [right]{14} to ({#1-10},5.8) node[vcc]{+\SI{5}{\volt}};
         \else
-            \draw ({#1-10},5) to[short, -o] node [right]{13}({#1-10},5.5);
+            \draw ({#1-10},5) 
+            to[short, -o] ({#1-10},5.5) node [right]{13};
         \fi
 
         % Common anode

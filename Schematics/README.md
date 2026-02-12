@@ -4,4 +4,4 @@ This folder contains `.tex` files schematics created using **circuitikz** used i
 
 ## Compilation
 
-To compile a specifix `.tex` schematic to a display-ready `.svg` simply set the **TARGET** to the file you want to compile and use `make`, `make clean` to cleanup compile residue, although it's already ignored in [.gitigonre](.gitignore).
+To compile a specifix `.tex` schematic to a display-ready `.svg` simply set the **TARGET** to the file you want to compile and use `make`, `make clean` to cleanup compile residue, although it's already ignored in [.gitignore](.gitignore).

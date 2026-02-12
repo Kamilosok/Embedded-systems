@@ -32,9 +32,11 @@ The solution is in [`exercise3.c`](exercise3.c)
 
 Build a multiplexed two-number display using the schematic below:
 
-![0-99 Clock](../Schematics/0-99_Clock.png)
+<p align="center">
+  <img src="../Schematics/0-99_Clock.svg" alt="0-99 Clock schematic">
+</p>
 
-The transistors on the schematics are PNP transistors (we used [BC557](https://www.onsemi.com/pdf/datasheet/bc556b-d.pdf)), which should be connected correspondingly to their datasheet. Improper connection **may damage the transistors!**
+Using $220 \Omega$ resistors. The transistors on the schematics are PNP transistors (we used [BC557](https://www.onsemi.com/pdf/datasheet/bc556b-d.pdf)), which should be connected correspondingly to their datasheet. Improper connection **may damage the transistors!**
 
 Use this system to build a clock counting from 0 to 99 each second and **resetting** when it reaches the upper value.
 
