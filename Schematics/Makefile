@@ -1,4 +1,4 @@
-TARGET = IR
+TARGET = LM293_Oscillator
 
 all: $(TARGET).svg
 

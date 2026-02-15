@@ -1,0 +1,63 @@
+\documentclass[tikz,border=2pt]{standalone}
+\usepackage[european]{circuitikz}
+\usepackage{siunitx}
+\usepackage{graphicx}
+
+\usetikzlibrary{backgrounds}
+
+\begin{document}
+\begin{circuitikz}[scale=1.5, transform shape, thick, font=\Large]
+
+    % Manual bounding box setting
+    \draw[use as bounding box] (-4.0,-2) rectangle (5.5,6.5);
+
+    % To see it on github
+    \begin{scope}[on background layer]
+        \fill[white] (-4.0,-2) rectangle (5.5,6.5);
+    \end{scope}
+
+
+
+    \draw
+    (-3, 5) node[vcc]{+\SI{5}{\volt}}
+    to [R, l=\raisebox{1.5em}{\rotatebox{-90}{\SI{330}{k\ohm}}}, label distance=5pt, -*] (-3, 3)
+    to [R, l=\raisebox{1.5em}{\rotatebox{-90}{\SI{330}{k\ohm}}}, label distance=5pt] (-3, 1)
+    to (-3, 1) node[ground]{};
+
+    \draw
+    (-3, 3) -- (-2, 3) -- (-2, -1) to [short, -*] (-0.44, -1) -- (0, -1)
+    to [R, l={\SI{330}{k\ohm}}] (3, -1)
+    to [short, -*] (3, 1.25)
+    to [short, -*] (3, 3);
+    
+    \draw
+    (3, 3) -- (1, 3)
+    to [R, l={\SI{330}{k\ohm}}] (-1.5, 3) -- (-1.5, 3)
+    to [short, -*] (-1.5, 2)
+    to [capacitor, l=\raisebox{1.5em}{\rotatebox{-90}{{\SI{10}{\nano\farad}}}}] (-1.5, 0)
+    node[ground]{};
+
+    \draw
+    (3,3) [R, l=\raisebox{-1em}{\rotatebox{90}{\SI{10}{k\ohm}}}, label distance=5pt]
+    to (3,5)  node[vcc]{+\SI{5}{\volt}};
+
+    % LM293 Comparator
+    \node[op amp, noinv input down](U1) at (0.75,1.25) {};
+    \node[above right, font=\footnotesize] at (U1.up) {8};
+    \node[below right, font=\footnotesize] at (U1.down) {4};
+    \node[above, font=\footnotesize] at (U1.-) {2};
+    \node[above, font=\footnotesize] at (U1.+) {3};
+    \node[above, font=\footnotesize] at (U1.out) {1};
+    \node at (U1.center) {\footnotesize LM293};
+
+    % Pin connections
+    \draw (U1.down) to ++(0,-1.75) node[ground]{};
+    \draw (U1.up) to (U1.up |- 0,5) node[vcc]{+\SI{5}{\volt}};
+    \draw (U1.out) -- (2, 1.25);
+    \draw (U1.-) -- (-1.5, 2);
+    \draw (U1.+) to (U1.+ |- 0,-1);
+    \draw (U1.out) -- (U1.out -| 4,0) node[right]{ICP1};
+    
+
+\end{circuitikz}
+\end{document}
