@@ -32,7 +32,7 @@ The solution is in [`exercise3.c`](exercise3.c)
 
 ## Exercise 4: Measuring temperature via Thermistor
 
-An NTC thermistor changes it's resistance with temperature according to the formula $R = R_0\space e^{-B(T_0^{-1}-T^{-1})}$, where:
+An NTC thermistor changes its resistance with temperature according to the formula $R = R_0\space e^{-B(T_0^{-1}-T^{-1})}$, where:
 
 - $R_0$ is the resistance of the thermistor in any chosen temperature $T_0$ (in Kelvin)
 - $T$ is the current temperature (in Kelvin)

@@ -1,4 +1,4 @@
-TARGET = 0-99_Clock
+TARGET = IR
 
 all: $(TARGET).svg
 

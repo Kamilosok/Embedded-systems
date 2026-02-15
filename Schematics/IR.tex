@@ -1,0 +1,33 @@
+\documentclass[tikz,border=2pt]{standalone}
+\usepackage[european]{circuitikz}
+\usepackage{siunitx}
+\usepackage{graphicx}
+
+\usetikzlibrary{backgrounds}
+
+\begin{document}
+\begin{circuitikz}[scale=1.5, transform shape, thick, font=\Large]
+
+    % Manual bounding box setting
+    \draw[use as bounding box] (-4.0,-1) rectangle (4,6.5);
+
+    % To see it on github
+    \begin{scope}[on background layer]
+        \fill[white] (-4.0,-1) rectangle (4,6.5);
+    \end{scope}
+
+    \draw
+    (-2, 4) node[above]{OC1A} 
+    % Hacky stuff
+    to [R, l=\raisebox{1.5em}{\rotatebox{-90}{\SI{2.2}{k\ohm}}}, label distance=5pt] (-2, 2)
+    to [led] (-2, 0) node[ground]{};
+
+    \draw
+    (0, 5) node[vcc]{+\SI{5}{\volt}} 
+    to (0, 3) node[draw, minimum width=1.0em, minimum height=0.5em, anchor=north] (IR) {IR det}
+    (IR.south) node[left=5pt, below=5pt]{2} to (0, 0) node[ground]{}
+    (IR.north) node[left=5pt, above=5pt]{3}
+    (IR.east) node[right=5pt, above=5pt]{1} to ++(1.5,0) node[right]{PB0};
+
+\end{circuitikz}
+\end{document}

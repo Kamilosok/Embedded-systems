@@ -1,0 +1,37 @@
+\documentclass[tikz,border=2pt]{standalone}
+\usepackage[european]{circuitikz}
+\usepackage{siunitx}
+
+\usetikzlibrary{backgrounds}
+
+\begin{document}
+\begin{circuitikz}[scale=1.5, transform shape, thick, font=\Large]
+
+    % Manual bounding box setting
+    \draw[use as bounding box] (-3.5,-2.5) rectangle (3.5,4.0);
+
+    % To see it on github
+    \begin{scope}[on background layer]
+        \fill[white] (-3.5,-2.5) rectangle (3.5,4.0);
+    \end{scope}
+
+
+    % LEDs
+    \draw (0, 2.5) node[vcc]{+\SI{5}{\volt}} 
+    to [short, -*] (0,2)
+    to [led] (0,1) node[right]{G}
+    to [R, -o] (0, -1) node[below]{PB1};
+
+    \draw (-2, 2)
+    to [led] (-2,1) node[right]{R}
+    to [R, -o] (-2, -1) node[below]{PB2};
+
+    \draw (2, 2)
+    to [led] (2,1) node[right]{B}
+    to [R, -o] (2, -1) node[below]{PB3};
+
+    % Common anode
+    \draw (-2, 2) -- (2, 2);
+
+\end{circuitikz}
+\end{document}
