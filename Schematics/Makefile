@@ -1,4 +1,4 @@
-TARGET = LM293_Oscillator
+TARGET = Driver_clock
 
 all: $(TARGET).svg
 

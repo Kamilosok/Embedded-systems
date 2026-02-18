@@ -1,0 +1,50 @@
+\documentclass[tikz,border=2pt]{standalone}
+\usepackage[european]{circuitikz}
+\usepackage{siunitx}
+\usepackage{graphicx}
+
+\usetikzlibrary{backgrounds}
+
+\begin{document}
+\begin{circuitikz}[scale=1.5, transform shape, thick, font=\Large]
+
+    % Manual bounding box setting
+    \draw[use as bounding box] (-6.0,-1.5) rectangle (5.5,5.5);
+
+    % To see it on github
+    \begin{scope}[on background layer]
+        \fill[white] (-6.0,-1.5) rectangle (5.5,5.5);
+    \end{scope}
+
+    % MCP4901 DAC
+    \node[draw, minimum width=5cm, minimum height=3cm] (DAC) at (0,2) {MCP4901};
+    
+    % DAC pins
+    \node[right] at ([yshift=1.2cm]DAC.west) {$\overline{\text{LDAC}}$};
+    \draw ([yshift=1.2cm]DAC.west) node[above left, font=\footnotesize]{5} to ++(-1,0) node[ground]{};
+
+    \node[right] at ([yshift=0.4cm]DAC.west) {SDI};
+    \draw ([yshift=0.4cm]DAC.west) node[above left, font=\footnotesize]{4} to ++(-1.5,0) node[left]{MOSI};
+  
+    \node[right] at ([yshift=-0.4cm]DAC.west) {SCK};
+    \draw ([yshift=-0.4cm]DAC.west) node[above left, font=\footnotesize]{3} to ++(-1.5,0) node[left]{SCK};
+
+    \node[right] at ([yshift=-1.2cm]DAC.west) {$\overline{\text{CS}}$};
+    \draw ([yshift=-1.2cm]DAC.west) node[above left, font=\footnotesize]{2} to ++(-1.5,0) node[left]{$\overline{\text{CS}}$};
+
+    \node[above] at (DAC.south) {Vss};
+    \draw (DAC.south) node[below right, font=\footnotesize]{7} to ++(0,-0.5) node[ground]{};
+
+    \node[left] at (DAC.east) {Vout};
+    \draw (DAC.east) node[above right, font=\footnotesize]{8} 
+    to ++(0.5,0) node[right, draw, minimum width=1.8cm, minimum height=0.8cm] (BUZZ) {Buzzer};
+    \draw (BUZZ.south) -- ++(0,-0.5) node[ground]{};
+
+    \node[below] at ([xshift=-0.2cm]DAC.north) {Vref};
+    \draw ([xshift=-0.2cm]DAC.north) node[above right, font=\footnotesize]{6} to ++(0,0.5) node[vcc]{+\SI{5}{\volt}};
+
+    \node[below] at ([xshift=1.2cm]DAC.north) {Vdd};
+    \draw ([xshift=1.2cm]DAC.north) node[above right, font=\footnotesize]{1} to ++(0,0.5) node[vcc]{+\SI{5}{\volt}};
+
+\end{circuitikz}
+\end{document}

@@ -48,4 +48,3 @@ The solution is in [`exercise4.c`](exercise4.c)
 
 > **Source:**
 > This list of problems was assigned as part of the *Embedded Systems* (SW) course in the 2025/26 Winter semester at University of Wrocław by [tilk](https://github.com/tilk)
->
