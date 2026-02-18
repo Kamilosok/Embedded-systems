@@ -1,4 +1,4 @@
-TARGET = Driver_clock
+TARGET = RTC
 
 all: $(TARGET).svg
 

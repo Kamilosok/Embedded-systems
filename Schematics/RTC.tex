@@ -1,0 +1,49 @@
+\documentclass[tikz,border=2pt]{standalone}
+\usepackage[european]{circuitikz}
+\usepackage{siunitx}
+\usepackage{graphicx}
+
+\usetikzlibrary{backgrounds}
+
+\begin{document}
+\begin{circuitikz}[scale=1.5, transform shape, thick, font=\Large]
+
+    % Manual bounding box setting
+    \draw[use as bounding box] (-7.5,-1.5) rectangle (3.5,6.0);
+
+    % To see it on github
+    \begin{scope}[on background layer]
+        \fill[white] (-7.5,-1.5) rectangle (3.5,6.0);
+    \end{scope}
+
+    % DS3231 RTC
+    \node[draw, minimum width=5cm, minimum height=3cm] (RTC) at (0,2) {DS3231};
+    
+    % RTC pins
+
+    % SDA + pull-up
+    \node[right] at ([yshift=1.0cm]RTC.west) {D};
+    \draw ([yshift=1.0cm]RTC.west) node[above left, font=\footnotesize]{} to [short, -*] ++(-1.0,0) to ++(-2.5,0) node[left]{SDA};
+
+    \draw ([xshift=-1.0cm, yshift=1.0cm]RTC.west)
+    to [R, l_=\raisebox{1.5em}{\rotatebox{-90}{\SI{10}{k\ohm}}}, label distance=5pt] ++(0, 1.5) node[vcc]{+\SI{5}{\volt}};
+
+    \node[right] at (RTC.west) {C};
+    \draw (RTC.west) node[above left, font=\footnotesize]{} to [short, -*] ++(-2.5,0) to ++(-1.0,0) node[left]{SCL};
+
+    % SCL + pull-up
+    \draw ([xshift=-2.5cm]RTC.west) -- +(0, 1.0)
+    to [R, l_=\raisebox{1.5em}{\rotatebox{-90}{\SI{10}{k\ohm}}}, label distance=5pt] ++(0, 2.5) node[vcc]{+\SI{5}{\volt}};
+  
+    \node[right] at ([yshift=-1.0cm]RTC.west) {NC};
+    \draw ([yshift=-1.0cm]RTC.west) node[above left, font=\footnotesize]{} to ++(-1,0);
+
+    % Other pins
+    \node[above] at (RTC.south) {-};
+    \draw (RTC.south) node[below right, font=\footnotesize]{} to ++(0,-0.5) node[ground]{};
+
+    \node[below] at (RTC.north) {+};
+    \draw (RTC.north) node[above right, font=\footnotesize]{} to ++(0,0.5) node[vcc]{+\SI{5}{\volt}};
+
+\end{circuitikz}
+\end{document}
