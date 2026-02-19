@@ -1,0 +1,45 @@
+\documentclass[tikz,border=2pt]{standalone}
+\usepackage[european]{circuitikz}
+\usepackage{siunitx}
+
+\usetikzlibrary{backgrounds}
+
+\begin{document}
+\begin{circuitikz}[scale=1.5, transform shape, thick, font=\Large]
+
+    % Manual bounding box setting
+    \draw[use as bounding box] (-10.0,-3.0) rectangle (2.5, 4.5);
+
+    % To see it on github
+    \begin{scope}[on background layer]
+        \fill[white] (-10.0,-3.0) rectangle (2.5,4.5);
+    \end{scope}
+
+    % N-channel MOSFET with body diode
+    \node[nmos, bodydiode, anchor=gate] (M1) at (-6,0) {};
+    \node[right, font=\footnotesize] at (M1.drain) {D};
+    \node[right, font=\footnotesize] at (M1.source) {S};
+    \node[above, font=\footnotesize] at (M1.gate) {G};
+    
+    % Gate
+    \draw (M1.gate) to ++(-1.0, 0) node[left]{PB5};
+    
+    % Drain
+    \draw (M1.drain) 
+        to [R, l=\raisebox{-1.0em}{\rotatebox{90}{\SI{47}{\ohm}}}, label distance=5pt, mirror] ++(0,2.5) 
+        node[vcc]{+\SI{5}{\volt}};
+    
+    % Source
+    \draw (M1.source) -- ++(0,-0.5) node[ground]{};
+
+    % Temperature sensor
+    \node[draw, minimum width=2.5cm, minimum height=0.8cm] (SENSOR) at (-3.0,2.0) {MCP9700};
+
+    \draw (SENSOR.south) node[below right, font=\footnotesize]{3} to ++(0,-0.5) node[ground]{};
+
+    \draw (SENSOR.east) node[above right, font=\footnotesize]{2} to ++(0.5,0) node[right]{ADC0};
+
+    \draw (SENSOR.north) node[above right, font=\footnotesize]{1} to ++(0, 0.5) node[vcc]{+\SI{5}{\volt}};
+
+\end{circuitikz}
+\end{document}

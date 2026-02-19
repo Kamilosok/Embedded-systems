@@ -1,4 +1,4 @@
-TARGET = RTC
+TARGET = Speaker_melody
 
 all: $(TARGET).svg
 

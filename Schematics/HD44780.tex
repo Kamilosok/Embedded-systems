@@ -1,0 +1,64 @@
+\documentclass[tikz,border=2pt]{standalone}
+\usepackage[european]{circuitikz}
+\usepackage{siunitx}
+
+\usetikzlibrary{backgrounds}
+
+\begin{document}
+\begin{circuitikz}[scale=1.5, transform shape, thick, font=\Large]
+
+    % Manual bounding box setting
+    \draw[use as bounding box] (-10.0,-5.0) rectangle (12.5,3.0);
+
+    % To see it on github
+    \begin{scope}[on background layer]
+        \fill[white] (-10.0,-5.0) rectangle (12.5,3.0);
+    \end{scope}
+
+    % HD44780 16x2 character LED display
+    \node[draw, minimum width=18cm, minimum height=3.5cm] (LCD) at (2.5,-0.5) {HD44780 16x2};
+
+    \node[above] at ([xshift=-8.0cm]LCD.south) {Vss};
+    \draw ([xshift=-8.0cm]LCD.south) node[below right, font=\footnotesize]{1} to ++(0,-0.5) node[ground]{};
+
+    \node[above] at ([xshift=-6.5cm]LCD.south) {Vdd};
+    \draw ([xshift=-6.5cm]LCD.south) node[below right, font=\footnotesize]{2} to ++(0,-0.5) node[vcc, rotate=180]{+\SI{5}{\volt}};
+
+    \node[above] at ([xshift=-5.0cm]LCD.south) {Vo};
+    \draw ([xshift=-5.0cm]LCD.south) node[below right, font=\footnotesize]{3} -- ++(0,-2.0) -- ++(-5.0, 0) -- ++(0, 1.5);
+    
+    % Potentiometer for contrast
+    \draw ([xshift=-11.05cm, yshift=-1.25cm]LCD.south) 
+    ++(0,-0.5) node[ground]{}
+    to [pR, l=\raisebox{-1.5em}{\rotatebox{90}{\SI{10}{k\ohm}}}, label distance=5pt, mirror, name=POT] ++(0, 2.5) node[vcc]{+\SI{5}{\volt}};
+    \draw (POT.wiper) -- ++(0.5, 0);
+
+    \node[above] at ([xshift=-3.5cm]LCD.south) {RS};
+    \draw ([xshift=-3.5cm]LCD.south) node[below right, font=\footnotesize]{4} to ++(0,-0.5) node[below]{PB0};
+
+    \node[above] at ([xshift=-2.0cm]LCD.south) {RW};
+    \draw ([xshift=-2.0cm]LCD.south) node[below right, font=\footnotesize]{5} to ++(0,-0.5) node[ground]{};
+
+    \node[above] at ([xshift=-0.5cm]LCD.south) {E};
+    \draw ([xshift=-0.5cm]LCD.south) node[below right, font=\footnotesize]{6} to ++(0,-0.5) node[below]{PD7};
+
+    \node[above] at ([xshift=1.0cm]LCD.south) {D4};
+    \draw ([xshift=1.0cm]LCD.south) node[below right, font=\footnotesize]{11} to ++(0,-0.5) node[below]{PD6};
+
+    \node[above] at ([xshift=2.5cm]LCD.south) {D5};
+    \draw ([xshift=2.5cm]LCD.south) node[below right, font=\footnotesize]{12} to ++(0,-0.5) node[below]{PD5};
+
+    \node[above] at ([xshift=4.0cm]LCD.south) {D6};
+    \draw ([xshift=4.0cm]LCD.south) node[below right, font=\footnotesize]{13} to ++(0,-0.5) node[below]{PD4};
+
+    \node[above] at ([xshift=5.5cm]LCD.south) {D7};
+    \draw ([xshift=5.5cm]LCD.south) node[below right, font=\footnotesize]{14} to ++(0,-0.5) node[below]{PD3};
+
+    \node[above] at ([xshift=7.0cm]LCD.south) {A};
+    \draw ([xshift=7.0cm]LCD.south) node[below right, font=\footnotesize]{15} to ++(0,-0.5) node[vcc, rotate=180]{+\SI{5}{\volt}};
+
+    \node[above] at ([xshift=8.5cm]LCD.south) {K};
+    \draw ([xshift=8.5cm]LCD.south) node[below right, font=\footnotesize]{16} to ++(0,-0.5) node[ground]{};
+
+\end{circuitikz}
+\end{document}

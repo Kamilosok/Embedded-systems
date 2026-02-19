@@ -1,0 +1,75 @@
+\documentclass[tikz,border=2pt]{standalone}
+\usepackage[european]{circuitikz}
+\usepackage{siunitx}
+\usepackage{graphicx}
+
+\usetikzlibrary{backgrounds}
+
+\begin{document}
+\begin{circuitikz}[scale=1.5, transform shape, thick, font=\Large]
+
+    % Manual bounding box setting
+    \draw[use as bounding box] (-7.0,-2.5) rectangle (11.5,7.0);
+
+    % To see it on github
+    \begin{scope}[on background layer]
+        \fill[white] (-7.0,-2.5) rectangle (11.5,7.0);
+    \end{scope}
+
+    % MCP4901 DAC
+    \node[draw, minimum width=5cm, minimum height=3cm] (DAC) at (0,2) {MCP4901};
+    
+    % DAC pins
+    \node[right] at ([yshift=1.2cm]DAC.west) {$\overline{\text{LDAC}}$};
+    \draw ([yshift=1.2cm]DAC.west) node[above left, font=\footnotesize]{5} to ++(-1,0) node[ground]{};
+
+    \node[right] at ([yshift=0.4cm]DAC.west) {SDI};
+    \draw ([yshift=0.4cm]DAC.west) node[above left, font=\footnotesize]{4} to ++(-1.5,0) node[left]{MOSI};
+  
+    \node[right] at ([yshift=-0.4cm]DAC.west) {SCK};
+    \draw ([yshift=-0.4cm]DAC.west) node[above left, font=\footnotesize]{3} to ++(-1.5,0) node[left]{SCK};
+
+    \node[right] at ([yshift=-1.2cm]DAC.west) {$\overline{\text{CS}}$};
+    \draw ([yshift=-1.2cm]DAC.west) node[above left, font=\footnotesize]{2} to ++(-1.5,0) node[left]{$\overline{\text{CS}}$};
+
+    \node[above] at (DAC.south) {Vss};
+    \draw (DAC.south) node[below right, font=\footnotesize]{7} to ++(0,-0.5) node[ground]{};
+
+    \node[below] at ([xshift=-0.2cm]DAC.north) {Vref};
+    \draw ([xshift=-0.2cm]DAC.north) node[above right, font=\footnotesize]{6} to ++(0,0.5) node[vcc]{+\SI{5}{\volt}};
+
+    \node[below] at ([xshift=1.2cm]DAC.north) {Vdd};
+    \draw ([xshift=1.2cm]DAC.north) node[above right, font=\footnotesize]{1} to ++(0,0.5) node[vcc]{+\SI{5}{\volt}};
+
+    \node[left] at (DAC.east) {Vout};
+    \draw (DAC.east) node[above right, font=\footnotesize]{8} 
+    to [R, l={\SI{1}{k\ohm}}] ++(2.0,0)
+    to [short, -*] ++(0.5,0) coordinate(DIODE_NODE);
+    
+    % Diodes 
+    \node[above right, rotate=-90, xshift=-1.0cm, yshift=1.0cm] at (DIODE_NODE) {1N4148};
+
+    \draw (DIODE_NODE) to[diode, invert, -*] ++(1.0,1.5) coordinate(NPN_NODE);
+    
+    % NPN transistor
+    \node[npn, anchor=B] (Q1) at (NPN_NODE) {};
+    \draw (Q1.C) -- ++(0,1.5) node[vcc]{+\SI{5}{\volt}};
+    \draw (NPN_NODE) to [R,l_=\raisebox{2.0em}{\rotatebox{-90}{\SI{220}{\ohm}}}, label distance=5pt] ++(0,1.5) node[vcc]{+\SI{5}{\volt}};
+    \draw (Q1.E) to[short, -*] ++(0.5,-0.75);
+
+    \draw (DIODE_NODE) to[diode, -*] ++(1.0,-1.5) coordinate(PNP_NODE);
+    
+    % PNP transistor
+    \node[pnp, anchor=B] (Q2) at (PNP_NODE) {};
+    \draw (Q2.C) -- ++(0,-1.5) node[ground]{};
+    \draw (PNP_NODE) to [R, l=\raisebox{0.5em}{\rotatebox{-90}{\SI{220}{\ohm}}}, label distance=5pt] ++(0,-1.5) node[ground]{};
+    \draw (Q2.E) to[short, -*] ++(0.5,0.75) coordinate(TRANSISTOR_JUNC);
+
+    % Speaker
+    \draw (TRANSISTOR_JUNC) -- ++(1.0,0) node[right, draw, minimum width=1.5cm, minimum height=0.8cm] (SPEAKER) {Speaker};
+    
+    % Capacitor
+    \draw (SPEAKER) to [eC, l=\raisebox{0.5em}{\rotatebox{-90}{\SI{100}{\micro\farad}}}, label distance=5pt] ++(0,-2.0) node[ground]{};
+
+\end{circuitikz}
+\end{document}
