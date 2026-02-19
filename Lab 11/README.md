@@ -16,7 +16,13 @@ The solution is in [`exercise1.c`](exercise1.c)
 
 ## Exercise 2: DC motor measurements
 
-Use the *Phase and Frequency Correct PWM* mode of Counter 1 (with `ICR1` as the `TOP` value) to control the DC motor same as in Exercise 1. In this mode, the counter works bidirectionally - the counter value alternately increases to the maximum value and decreases to the minimum value. In this mode the extremes are reached in the **middle** of the square wave pulse, which can be used to **measure the motor's state** by measuring the junction between the motor and MOSFET with the ADC, these properties are:
+Use the *Phase and Frequency Correct PWM* mode of Counter 1 (with `ICR1` as the `TOP` value) to control the DC motor same as in Exercise 1. In this mode, the counter works bidirectionally - the counter value alternately increases to the maximum value and decreases to the minimum value. In this mode the extremes are reached in the **middle** of the square wave pulse, connect the junction between the motor and MOSFET with the ADC, like this:
+
+<p align="center">
+  <img src="../Schematics/DC_Motor_ADC.svg" alt="DC Motor ADC">
+</p>
+
+With this connection we can measure useful properties of the motor:
 
 - When the MOSFET is closed electromotive force of the motor can be measured. Difference between $5\text{V}$ nd the measured voltage is linearly proportional to the motor's rotational speed.
 

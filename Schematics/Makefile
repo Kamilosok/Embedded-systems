@@ -1,4 +1,4 @@
-TARGET = DC_Motor
+TARGET = DC_Motor_ADC
 
 all: $(TARGET).svg
 
