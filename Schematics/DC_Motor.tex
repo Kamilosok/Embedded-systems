@@ -1,0 +1,44 @@
+\documentclass[tikz,border=2pt]{standalone}
+\usepackage[european]{circuitikz}
+\usepackage{siunitx}
+
+\usetikzlibrary{backgrounds}
+
+\begin{document}
+\begin{circuitikz}[scale=1.5, transform shape, thick, font=\Large]
+
+    % Manual bounding box setting
+    \draw[use as bounding box] (-8.5,-3.0) rectangle (0.5, 4.5);
+
+    % To see it on github
+    \begin{scope}[on background layer]
+        \fill[white] (-8.5,-3.0) rectangle (0.5,4.5);
+    \end{scope}
+
+    % N-channel MOSFET with body diode
+    \node[nmos, bodydiode, anchor=gate] (M1) at (-5,-1) {};
+    \node[right, font=\footnotesize] at (M1.drain) {D};
+    \node[right, font=\footnotesize] at (M1.source) {S};
+    \node[above, font=\footnotesize] at (M1.gate) {G};
+    
+    % Gate
+    \draw (M1.gate) to ++(-1.0, 0) node[left]{OC1A};
+    
+    % Drain
+    \draw (M1.drain) 
+        to [short, -*] ++(0, 1.0) coordinate(DRAIN_NODE);
+    
+    % DC Motor
+    \draw (DRAIN_NODE) to [Telmech=M, l=M] ++(0, 2.0) node[vcc]{+\SI{5}{\volt}};
+
+    % Diode
+    \draw (DRAIN_NODE) -- ++(-1.5, 0)
+    to [diode, l=\raisebox{-1.5em}{\rotatebox{90}{1N4148}}] ++(0, 2.0) node[]{}
+    to [short, -*] ++(1.5, 0);
+    
+    % Source
+    \draw (M1.source) -- ++(0,-0.5) node[ground]{};
+
+
+\end{circuitikz}
+\end{document}

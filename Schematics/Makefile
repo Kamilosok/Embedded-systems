@@ -1,4 +1,4 @@
-TARGET = Speaker_melody
+TARGET = DC_Motor
 
 all: $(TARGET).svg
 
