@@ -17,7 +17,7 @@ Connect the [ATtiny84A](https://ww1.microchip.com/downloads/en/DeviceDoc/ATtiny2
 
 The connections of pins 7, 8 and 9 should have $2.2\text{k}\Omega$ resistors to avoid flows of high current during any programming/installing errors. Additionally connect a $100\text{nF}$ capacitor as close to pins 1 and 14 as possible. Obviously improper connections **may damage the system!**
 
-After installing the installer program on the ATmega328P connect a $10\text{\muF}$ between the RST pin and ground. *If You're using an electrolytic capactitor make sure to connect the $-$ leg to ground, otherwise the capacitor **may explode***. The capacitor is used to make the ATmega328P not reset when using it as a capacitor, it also prevents it from being programmable, so remove it before programming the ATmega328P.
+After installing the installer program on the ATmega328P connect a $10\mu\text{F}$ between the RST pin and ground. *If You're using an electrolytic capactitor make sure to connect the* $-$ *leg to ground, otherwise the capacitor **may explode***. The capacitor is used to make the ATmega328P not reset when using it as a capacitor, it also prevents it from being programmable, so remove it before programming the ATmega328P.
 
 With a connected setup check the best way to check the correctness of everything is to install a simple LED blinking program to ATtiny84A and *see* if it works.
 
